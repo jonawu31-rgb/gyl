@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import {
   Home as HomeIcon,
@@ -12,25 +12,25 @@ import {
   ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
 
-interface Level3Item {
+export interface Level3Item {
   label: string;
   page?: string;
 }
 
-interface Level2Item {
+export interface Level2Item {
   label: string;
   page?: string;
   children?: Level3Item[];
 }
 
-interface MenuItem {
+export interface MenuItem {
   icon: any;
   label: string;
   page?: string;
   children?: Level2Item[];
 }
 
-const menuItems: MenuItem[] = [
+export const menuItems: MenuItem[] = [
   { icon: HomeIcon, label: "首页", page: "首页" },
   {
     icon: PeopleIcon,
@@ -215,6 +215,44 @@ interface SidebarProps {
 export function Sidebar({ currentPage, onPageChange }: SidebarProps) {
   const [expandedL1, setExpandedL1] = useState<string>("");
   const [expandedL2, setExpandedL2] = useState<string>("");
+
+  useEffect(() => {
+    let nextExpandedL1 = "";
+    let nextExpandedL2 = "";
+
+    for (const item of menuItems) {
+      if ((item.page ?? item.label) === currentPage) {
+        nextExpandedL1 = "";
+        nextExpandedL2 = "";
+        break;
+      }
+
+      if (!item.children) continue;
+
+      const l2Match = item.children.find((child) => (child.page ?? child.label) === currentPage);
+      if (l2Match) {
+        nextExpandedL1 = item.label;
+        nextExpandedL2 = "";
+        break;
+      }
+
+      for (const child of item.children) {
+        if (!child.children) continue;
+
+        const l3Match = child.children.find((grandChild) => (grandChild.page ?? grandChild.label) === currentPage);
+        if (l3Match) {
+          nextExpandedL1 = item.label;
+          nextExpandedL2 = child.label;
+          break;
+        }
+      }
+
+      if (nextExpandedL1) break;
+    }
+
+    setExpandedL1(nextExpandedL1);
+    setExpandedL2(nextExpandedL2);
+  }, [currentPage]);
 
   const handleL1Click = (item: MenuItem) => {
     if (item.children) {

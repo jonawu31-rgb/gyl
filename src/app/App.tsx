@@ -17,7 +17,7 @@ import { SalesRanking } from "./components/SalesRanking";
 import { SalesAmountChart } from "./components/SalesAmountChart";
 import { Announcements } from "./components/Announcements";
 import { TodoList } from "./components/TodoList";
-import { Sidebar } from "./components/Sidebar";
+import { Sidebar, menuItems } from "./components/Sidebar";
 import { TabBar } from "./components/TabBar";
 import { Login } from "./components/Login";
 import { PartsData } from "./components/PartsData";
@@ -29,6 +29,91 @@ import { SalesHistory } from "./components/SalesHistory";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState("首页");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  type SearchResult = {
+    label: string;
+    page: string;
+    path: string;
+  };
+
+  const normalize = (value: string) => value.trim().toLowerCase();
+
+  const fuzzyMatch = (source: string, query: string) => {
+    const normalizedSource = normalize(source);
+    const normalizedQuery = normalize(query);
+
+    if (!normalizedQuery) return false;
+    if (normalizedSource.includes(normalizedQuery)) return true;
+
+    let index = 0;
+    for (const char of normalizedQuery) {
+      index = normalizedSource.indexOf(char, index);
+      if (index === -1) return false;
+      index += 1;
+    }
+    return true;
+  };
+
+  const flattenMenuItems = (): SearchResult[] => {
+    const results: SearchResult[] = [];
+
+    for (const item of menuItems) {
+      const l1Page = item.page ?? item.label;
+      if (!item.children) {
+        results.push({
+          label: item.label,
+          page: l1Page,
+          path: item.label,
+        });
+        continue;
+      }
+
+      for (const child of item.children) {
+        const l2Page = child.page ?? child.label;
+        const l2Path = `${item.label} / ${child.label}`;
+
+        if (!child.children) {
+          results.push({
+            label: child.label,
+            page: l2Page,
+            path: l2Path,
+          });
+          continue;
+        }
+
+        for (const grandChild of child.children) {
+          results.push({
+            label: grandChild.label,
+            page: grandChild.page ?? grandChild.label,
+            path: `${l2Path} / ${grandChild.label}`,
+          });
+        }
+      }
+    }
+
+    return results;
+  };
+
+  const searchResults = searchQuery.trim()
+    ? flattenMenuItems()
+        .filter((item) => {
+          const query = searchQuery.trim();
+          return (
+            fuzzyMatch(item.label, query) ||
+            fuzzyMatch(item.page, query) ||
+            fuzzyMatch(item.path, query)
+          );
+        })
+        .slice(0, 8)
+    : [];
+
+  const openPage = (page: string) => {
+    setCurrentPage(page);
+    setSearchQuery("");
+    setSearchOpen(false);
+  };
 
   if (!isLoggedIn) {
     return <Login onLogin={() => setIsLoggedIn(true)} />;
@@ -42,15 +127,53 @@ export default function App() {
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-4 py-2 h-14 shrink-0">
           <div className="flex items-center justify-between gap-4 h-full">
-            <div className="flex-1 max-w-sm">
+            <div className="relative flex-1 max-w-sm">
               <div className="relative">
                 <SearchIcon sx={{ fontSize: 16 }} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="搜索订单、客户、商品..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setSearchOpen(true);
+                  }}
+                  onFocus={() => setSearchOpen(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      if (searchResults[0]) {
+                        openPage(searchResults[0].page);
+                      }
+                    }
+                    if (e.key === "Escape") {
+                      setSearchOpen(false);
+                    }
+                  }}
                   className="w-full pl-9 pr-4 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-gray-400"
                 />
               </div>
+              {searchOpen && searchQuery.trim() && (
+                <div className="absolute left-0 right-0 top-full mt-1 z-20 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+                  {searchResults.length > 0 ? (
+                    <div className="max-h-80 overflow-auto py-1">
+                      {searchResults.map((item) => (
+                        <button
+                          key={`${item.page}-${item.path}`}
+                          type="button"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => openPage(item.page)}
+                          className="flex w-full flex-col items-start gap-0.5 px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="text-sm font-medium text-gray-800">{item.label}</span>
+                          <span className="text-[11px] text-gray-400">{item.path}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="px-3 py-3 text-sm text-gray-500">未找到匹配页面</div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <button className="relative p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
