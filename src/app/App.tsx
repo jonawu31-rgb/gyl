@@ -24,6 +24,7 @@ import { PartsData } from "./components/PartsData";
 import { SalesOrder } from "./components/SalesOrder";
 import { QuotationOrder } from "./components/QuotationOrder";
 import { SalesCart } from "./components/SalesCart";
+import { SalesHistory } from "./components/SalesHistory";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -131,6 +132,10 @@ export default function App() {
           ) : currentPage === "销售手推车" ? (
             <div className="h-full">
               <SalesCart />
+            </div>
+          ) : currentPage === "销售历史订单" ? (
+            <div className="h-full">
+              <SalesHistory />
             </div>
           ) : (
             <div className="h-full flex items-center justify-center">
