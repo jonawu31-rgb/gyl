@@ -45,7 +45,7 @@ export function SalesAmountChart() {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={salesData} margin={{ top: 8, right: 8, left: -16, bottom: 4 }}>
             <defs>
-              <linearGradient id="salesAmtColorValue" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient key="salesAmtColorValue" id="salesAmtColorValue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.35} />
                 <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0.02} />
               </linearGradient>

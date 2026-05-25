@@ -82,7 +82,7 @@ export function InventoryStats() {
                     <stop offset="100%" stopColor={entry.gradient[1]} />
                   </linearGradient>
                 ))}
-                <filter id="pie-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <filter key="pie-shadow" id="pie-shadow" x="-20%" y="-20%" width="140%" height="140%">
                   <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#3b82f6" floodOpacity="0.28" />
                 </filter>
               </defs>
