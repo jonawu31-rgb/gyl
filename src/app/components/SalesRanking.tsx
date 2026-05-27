@@ -42,33 +42,33 @@ export function SalesRanking() {
             margin={{ top: 16, right: 40, left: 4, bottom: 16 }}
           >
             <defs>
-              <linearGradient key="sranking-g-0" id="sranking-g-0" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor={rankingData[0].gradient[0]} />
-                <stop offset="100%" stopColor={rankingData[0].gradient[1]} />
+              <linearGradient id="sranking-g-0" x1="0" y1="0" x2="1" y2="0">
+                <stop key="sranking-g-0-start" offset="0%" stopColor={rankingData[0].gradient[0]} />
+                <stop key="sranking-g-0-end" offset="100%" stopColor={rankingData[0].gradient[1]} />
               </linearGradient>
-              <linearGradient key="sranking-g-1" id="sranking-g-1" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor={rankingData[1].gradient[0]} />
-                <stop offset="100%" stopColor={rankingData[1].gradient[1]} />
+              <linearGradient id="sranking-g-1" x1="0" y1="0" x2="1" y2="0">
+                <stop key="sranking-g-1-start" offset="0%" stopColor={rankingData[1].gradient[0]} />
+                <stop key="sranking-g-1-end" offset="100%" stopColor={rankingData[1].gradient[1]} />
               </linearGradient>
-              <linearGradient key="sranking-g-2" id="sranking-g-2" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor={rankingData[2].gradient[0]} />
-                <stop offset="100%" stopColor={rankingData[2].gradient[1]} />
+              <linearGradient id="sranking-g-2" x1="0" y1="0" x2="1" y2="0">
+                <stop key="sranking-g-2-start" offset="0%" stopColor={rankingData[2].gradient[0]} />
+                <stop key="sranking-g-2-end" offset="100%" stopColor={rankingData[2].gradient[1]} />
               </linearGradient>
-              <linearGradient key="sranking-g-3" id="sranking-g-3" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor={rankingData[3].gradient[0]} />
-                <stop offset="100%" stopColor={rankingData[3].gradient[1]} />
+              <linearGradient id="sranking-g-3" x1="0" y1="0" x2="1" y2="0">
+                <stop key="sranking-g-3-start" offset="0%" stopColor={rankingData[3].gradient[0]} />
+                <stop key="sranking-g-3-end" offset="100%" stopColor={rankingData[3].gradient[1]} />
               </linearGradient>
-              <filter key="sranking-shadow-0" id="sranking-shadow-0" x="-5%" y="-80%" width="130%" height="260%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor={rankingData[0].color} floodOpacity="0.45" />
+              <filter id="sranking-shadow-0" x="-5%" y="-80%" width="130%" height="260%">
+                <feDropShadow key="sranking-shadow-0-drop" dx="0" dy="2" stdDeviation="3" floodColor={rankingData[0].color} floodOpacity="0.45" />
               </filter>
-              <filter key="sranking-shadow-1" id="sranking-shadow-1" x="-5%" y="-80%" width="130%" height="260%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor={rankingData[1].color} floodOpacity="0.45" />
+              <filter id="sranking-shadow-1" x="-5%" y="-80%" width="130%" height="260%">
+                <feDropShadow key="sranking-shadow-1-drop" dx="0" dy="2" stdDeviation="3" floodColor={rankingData[1].color} floodOpacity="0.45" />
               </filter>
-              <filter key="sranking-shadow-2" id="sranking-shadow-2" x="-5%" y="-80%" width="130%" height="260%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor={rankingData[2].color} floodOpacity="0.45" />
+              <filter id="sranking-shadow-2" x="-5%" y="-80%" width="130%" height="260%">
+                <feDropShadow key="sranking-shadow-2-drop" dx="0" dy="2" stdDeviation="3" floodColor={rankingData[2].color} floodOpacity="0.45" />
               </filter>
-              <filter key="sranking-shadow-3" id="sranking-shadow-3" x="-5%" y="-80%" width="130%" height="260%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor={rankingData[3].color} floodOpacity="0.45" />
+              <filter id="sranking-shadow-3" x="-5%" y="-80%" width="130%" height="260%">
+                <feDropShadow key="sranking-shadow-3-drop" dx="0" dy="2" stdDeviation="3" floodColor={rankingData[3].color} floodOpacity="0.45" />
               </filter>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />

@@ -1,12 +1,12 @@
 import { useState } from "react";
+import imgLoginBg from "figma:asset/2ab02ad19ae9ff8fe85aa0d60b68394c8366bad4.png";
+import { Logo } from "./Logo";
 import {
   Person as PersonIcon,
   Lock as LockIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from "@mui/icons-material";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import backgroundImg from "../../imports/______.png";
 
 interface LoginProps {
   onLogin?: () => void;
@@ -23,28 +23,23 @@ export function Login({ onLogin }: LoginProps) {
 
   return (
     <div className="h-screen w-screen flex overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Left Side - Background with 3D Graphics */}
+      {/* Left Side - Background Image */}
       <div className="flex-1 relative overflow-hidden hidden lg:flex flex-col justify-start items-start px-16 pt-24">
         {/* Background Image */}
-        <div className="absolute inset-0">
-          <ImageWithFallback
-            src={backgroundImg}
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <img
+          src={imgLoginBg}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        />
 
         {/* Content Overlay */}
         <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl rotate-12 shadow-2xl flex items-center justify-center ring-4 ring-blue-500/20">
-              <div className="w-10 h-10 bg-white/30 backdrop-blur-sm rounded-xl -rotate-12" />
-            </div>
+          <div className="flex items-center gap-3 mb-8">
+            <Logo />
+            <h1 className="text-6xl font-bold text-gray-800 tracking-tight">车配智数</h1>
           </div>
-
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent mb-6 tracking-tight">车配智数</h1>
           <p className="text-xl text-gray-600 mb-4 font-semibold">智能 · 高效 · 可靠</p>
-          <p className="text-base text-gray-600 max-w-lg leading-relaxed">
+          <p className="text-base text-gray-500 max-w-lg leading-relaxed">
             一站式数据管理分析平台，助力企业数字化转型
           </p>
         </div>

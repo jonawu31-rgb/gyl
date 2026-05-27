@@ -95,7 +95,7 @@ export function SalesHistoryDetailDialog({ open, onClose, order }: SalesHistoryD
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-7xl max-h-[90vh] flex flex-col">
+      <div className="bg-white rounded-xl shadow-2xl flex flex-col" style={{ width: '1000px', height: '600px' }}>
         {/* Header */}
         <div
           className="px-5 py-2.5 border-b border-gray-200 rounded-t-xl flex items-center justify-between"
@@ -142,38 +142,38 @@ export function SalesHistoryDetailDialog({ open, onClose, order }: SalesHistoryD
             <tbody>
               {mockDetailData.map((item, index) => (
                 <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
-                  <td className="px-4 py-3 text-sm text-gray-900">{index + 1}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{index + 1}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.settlementTime}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.orderNo}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.source}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.customerName}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.category}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.partName}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.specification}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.partCode}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.unitPrice.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.quantity}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.discount.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.deduction.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.amount.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.unitCost.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.totalCost.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.creator}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.origin}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.supplier}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.warehouse}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.type}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{item.remark}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.source}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.customerName}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.category}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.partName}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.specification}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.partCode}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.unitPrice.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.quantity}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.discount.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.deduction.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.amount.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.unitCost.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.totalCost.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.creator}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.origin}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.supplier}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.warehouse}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.type}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.remark}</td>
                 </tr>
               ))}
               {/* Totals Row */}
               <tr className="bg-blue-50 border-t-2 border-blue-200 font-semibold">
-                <td className="px-4 py-3 text-sm text-gray-900" colSpan={10}>合计</td>
-                <td className="px-4 py-3 text-sm text-gray-900 text-right">{totals.quantity}</td>
-                <td className="px-4 py-3 text-sm text-gray-900 text-right">{totals.discount.toFixed(2)}</td>
-                <td className="px-4 py-3 text-sm text-gray-900 text-right">{totals.deduction.toFixed(2)}</td>
-                <td className="px-4 py-3 text-sm text-gray-900 text-right">{totals.amount.toFixed(2)}</td>
-                <td className="px-4 py-3" colSpan={8}></td>
+                <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap" colSpan={10}>合计</td>
+                <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{totals.quantity}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{totals.discount.toFixed(2)}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{totals.deduction.toFixed(2)}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{totals.amount.toFixed(2)}</td>
+                <td className="px-4 py-3 whitespace-nowrap" colSpan={8}></td>
               </tr>
             </tbody>
           </table>

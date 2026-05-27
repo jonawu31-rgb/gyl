@@ -277,6 +277,10 @@ export function SalesHistory() {
         <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-gray-800">销售历史订单</h2>
+            <button className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 flex items-center gap-1.5">
+              <ExportIcon sx={{ fontSize: 16 }} />
+              导出
+            </button>
           </div>
         </div>
 
@@ -314,75 +318,92 @@ export function SalesHistory() {
 
         {/* Search & Filter */}
         <div className="px-4 py-3 border-b border-gray-200 bg-white">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-            <input
-              type="text"
-              placeholder="客户查询"
-              value={searchFilters.customer}
-              onChange={(e) => setSearchFilters({ ...searchFilters, customer: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-            />
-            <input
-              type="text"
-              placeholder="配件查询"
-              value={searchFilters.part}
-              onChange={(e) => setSearchFilters({ ...searchFilters, part: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-            />
-            <select
-              value={searchFilters.salesperson}
-              onChange={(e) => setSearchFilters({ ...searchFilters, salesperson: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-            >
-              <option value="">销售员</option>
-              <option value="李销售">李销售</option>
-              <option value="张销售">张销售</option>
-            </select>
-            <input
-              type="date"
-              placeholder="开始日期"
-              value={searchFilters.startDate}
-              onChange={(e) => setSearchFilters({ ...searchFilters, startDate: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-            />
-            <input
-              type="date"
-              placeholder="结束日期"
-              value={searchFilters.endDate}
-              onChange={(e) => setSearchFilters({ ...searchFilters, endDate: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-            />
-            {activeTab === "orders" && (
+          <div className="space-y-3">
+            {/* First Row */}
+            <div className="grid grid-cols-12 gap-3 items-center">
+              <label className="col-span-1 text-sm font-medium text-gray-700">客户查询</label>
+              <input
+                type="text"
+                placeholder="姓名/电话/VIN码"
+                value={searchFilters.customer}
+                onChange={(e) => setSearchFilters({ ...searchFilters, customer: e.target.value })}
+                className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
+              />
+
+              <label className="col-span-1 text-sm font-medium text-gray-700">配件查询</label>
+              <input
+                type="text"
+                placeholder="名称/规格/编码/OE码/备注"
+                value={searchFilters.part}
+                onChange={(e) => setSearchFilters({ ...searchFilters, part: e.target.value })}
+                className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
+              />
+
+              <label className="col-span-1 text-sm font-medium text-gray-700">销售员</label>
               <select
-                value={searchFilters.mallOrder}
-                onChange={(e) => setSearchFilters({ ...searchFilters, mallOrder: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
+                value={searchFilters.salesperson}
+                onChange={(e) => setSearchFilters({ ...searchFilters, salesperson: e.target.value })}
+                className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
               >
-                <option value="">商城单据</option>
-                <option value="是">是</option>
-                <option value="否">否</option>
+                <option value="">请选择</option>
+                <option value="李销售">李销售</option>
+                <option value="张销售">张销售</option>
               </select>
-            )}
-          </div>
-          <div className="flex items-center gap-2 mt-3">
-            <button
-              onClick={handleSearch}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm hover:shadow flex items-center gap-1.5"
-            >
-              <SearchIcon sx={{ fontSize: 16 }} />
-              搜索
-            </button>
-            <button
-              onClick={handleReset}
-              className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 flex items-center gap-1.5"
-            >
-              <RefreshIcon sx={{ fontSize: 16 }} />
-              重置
-            </button>
-            <button className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 flex items-center gap-1.5">
-              <ExportIcon sx={{ fontSize: 16 }} />
-              导出
-            </button>
+            </div>
+
+            {/* Second Row */}
+            <div className="grid grid-cols-12 gap-3 items-center">
+              <label className="col-span-1 text-sm font-medium text-gray-700">销售时间</label>
+              <div className="col-span-3 flex items-center gap-2">
+                <input
+                  type="date"
+                  placeholder="开始日期"
+                  value={searchFilters.startDate}
+                  onChange={(e) => setSearchFilters({ ...searchFilters, startDate: e.target.value })}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
+                />
+                <span className="text-sm text-gray-500">至</span>
+                <input
+                  type="date"
+                  placeholder="结束日期"
+                  value={searchFilters.endDate}
+                  onChange={(e) => setSearchFilters({ ...searchFilters, endDate: e.target.value })}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
+                />
+              </div>
+
+              {activeTab === "orders" && (
+                <>
+                  <label className="col-span-1 text-sm font-medium text-gray-700">商城单据</label>
+                  <select
+                    value={searchFilters.mallOrder}
+                    onChange={(e) => setSearchFilters({ ...searchFilters, mallOrder: e.target.value })}
+                    className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
+                  >
+                    <option value="">请选择</option>
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                  </select>
+                </>
+              )}
+
+              <div className={activeTab === "orders" ? "col-span-4 flex items-center justify-end gap-2" : "col-span-8 flex items-center justify-end gap-2"}>
+                <button
+                  onClick={handleSearch}
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm hover:shadow flex items-center gap-1.5"
+                >
+                  <SearchIcon sx={{ fontSize: 16 }} />
+                  搜索
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 flex items-center gap-1.5"
+                >
+                  <RefreshIcon sx={{ fontSize: 16 }} />
+                  重置
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -397,7 +418,7 @@ export function SalesHistory() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">订单号</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">来源</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">客户名称</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">履约状态</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">履约状态</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">成本</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">售价</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">利润金额</th>
@@ -411,7 +432,7 @@ export function SalesHistory() {
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">预付款</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">其他支付</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">配送方式</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">还款状态</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">还款状态</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">配送车辆</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">配送公司</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">收货地址</th>
@@ -426,78 +447,98 @@ export function SalesHistory() {
               <tbody>
                 {mockOrderData.map((item, index) => (
                   <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors group">
-                    <td className="px-4 py-3 text-sm text-gray-900">{index + 1}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{index + 1}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.saleTime}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.orderNo}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.source}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.customerName}</td>
-                    <td className="px-4 py-3 text-sm">
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.source}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.customerName}</td>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
                       {item.fulfillmentStatus !== "已完成" ? (
                         <button
                           onClick={() => handleFulfillmentClick(item.fulfillmentStatus)}
-                          className="text-blue-600 hover:text-blue-800 hover:underline"
+                          className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                            item.fulfillmentStatus === "待拣货"
+                              ? "bg-blue-100 text-blue-700"
+                              : item.fulfillmentStatus === "待打包"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : item.fulfillmentStatus === "待发货"
+                              ? "bg-orange-100 text-orange-700"
+                              : "bg-gray-100 text-gray-700"
+                          } hover:opacity-80 transition-opacity`}
                         >
                           {item.fulfillmentStatus}
                         </button>
                       ) : (
-                        <span className="text-gray-900">{item.fulfillmentStatus}</span>
+                        <span className="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                          {item.fulfillmentStatus}
+                        </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.cost.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.salePrice.toFixed(2)}</td>
-                    <td className={`px-4 py-3 text-sm text-right ${item.profitAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.cost.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.salePrice.toFixed(2)}</td>
+                    <td className={`px-4 py-3 text-sm text-right whitespace-nowrap ${item.profitAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {item.profitAmount.toFixed(2)}
                     </td>
-                    <td className={`px-4 py-3 text-sm text-right ${item.profitRate >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <td className={`px-4 py-3 text-sm text-right whitespace-nowrap ${item.profitRate >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {item.profitRate.toFixed(2)}%
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.freight.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.discount.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.deduction.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.payable.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.actualPayment.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.onAccount.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.advancePayment.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.otherPayment.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.deliveryMethod}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.repaymentStatus}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.deliveryVehicle}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.deliveryCompany}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.deliveryAddress}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.contactPerson}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.contactPhone}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.creator}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.salesperson}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.isMallOrder}</td>
-                    <td className="px-4 py-3 text-sm sticky right-0 bg-white group-hover:bg-blue-50/50 transition-colors z-[5]" style={{ boxShadow: '-4px 0 8px -2px rgba(0, 0, 0, 0.15)' }}>
-                      <div className="flex items-center justify-center gap-1">
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.freight.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.discount.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.deduction.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.payable.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.actualPayment.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.onAccount.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.advancePayment.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.otherPayment.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.deliveryMethod}</td>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                        item.repaymentStatus === "已挂账"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : item.repaymentStatus === "未挂账"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-700"
+                      }`}>
+                        {item.repaymentStatus}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.deliveryVehicle}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.deliveryCompany}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.deliveryAddress}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.contactPerson}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.contactPhone}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.creator}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.salesperson}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.isMallOrder}</td>
+                    <td className="px-4 py-3 text-sm sticky right-0 bg-white group-hover:bg-blue-50/50 transition-colors z-[5] whitespace-nowrap" style={{ boxShadow: '-4px 0 8px -2px rgba(0, 0, 0, 0.15)' }}>
+                      <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleEditSalesperson(item)}
-                          className="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors"
-                          title="修改销售员"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors px-1 py-0.5 whitespace-nowrap"
                         >
                           <EditIcon sx={{ fontSize: 16 }} />
+                          <span className="text-xs">修改销售员</span>
                         </button>
                         <button
                           onClick={() => handleVoid(item)}
-                          className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
-                          title="作废"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors px-1 py-0.5 whitespace-nowrap"
                         >
                           <DeleteIcon sx={{ fontSize: 16 }} />
+                          <span className="text-xs">作废</span>
                         </button>
                         <button
                           onClick={() => handlePrint(item)}
-                          className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors"
-                          title="打印"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors px-1 py-0.5 whitespace-nowrap"
                         >
                           <PrintIcon sx={{ fontSize: 16 }} />
+                          <span className="text-xs">打印</span>
                         </button>
                         <button
                           onClick={() => handleViewDetail(item)}
-                          className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors"
-                          title="查看"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors px-1 py-0.5 whitespace-nowrap"
                         >
                           <ViewIcon sx={{ fontSize: 16 }} />
+                          <span className="text-xs">查看</span>
                         </button>
                       </div>
                     </td>
@@ -558,28 +599,28 @@ export function SalesHistory() {
               <tbody>
                 {mockDetailData.map((item, index) => (
                   <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
-                    <td className="px-4 py-3 text-sm text-gray-900">{index + 1}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{index + 1}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.saleTime}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.orderNo}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.source}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.customerName}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.category}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.partName}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.specification}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.partCode}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.unitPrice.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.quantity}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.discount.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.deduction.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.amount.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.unitCost.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900 text-right">{item.totalCost.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.creator}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.origin}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.supplier}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.warehouse}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.type}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{item.remark}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.source}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.customerName}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.category}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.partName}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.specification}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.partCode}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.unitPrice.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.quantity}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.discount.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.deduction.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.amount.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.unitCost.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 text-right whitespace-nowrap">{item.totalCost.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.creator}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.origin}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.supplier}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.warehouse}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.type}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{item.remark}</td>
                   </tr>
                 ))}
                 {/* Totals Row */}

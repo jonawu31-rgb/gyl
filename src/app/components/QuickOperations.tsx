@@ -17,14 +17,15 @@ interface QuickOpItem {
   icon: React.ElementType;
   label: string;
   gradient: string;
+  page?: string;
 }
 
 const operations: QuickOpItem[] = [
   { icon: ManageSearch,       label: '库存查询',     gradient: 'from-blue-500 to-blue-600'       },
   { icon: PeopleAlt,          label: '客户资料',     gradient: 'from-emerald-500 to-teal-600'    },
   { icon: Favorite,           label: '客户偏好',     gradient: 'from-pink-500 to-rose-600'       },
-  { icon: ReceiptLong,        label: '销售/报价开单', gradient: 'from-violet-500 to-purple-600'   },
-  { icon: History,            label: '销售历史订单',  gradient: 'from-amber-500 to-orange-500'    },
+  { icon: ReceiptLong,        label: '销售/报价开单', gradient: 'from-violet-500 to-purple-600',   page: '销售/报价开单' },
+  { icon: History,            label: '销售历史订单',  gradient: 'from-amber-500 to-orange-500',    page: '销售历史订单' },
   { icon: AssignmentReturn,   label: '客户退货',     gradient: 'from-red-500 to-rose-500'        },
   { icon: StoreMallDirectory, label: '供应商管理',   gradient: 'from-cyan-500 to-sky-600'        },
   { icon: Warehouse,          label: '仓库管理',     gradient: 'from-teal-500 to-emerald-600'    },
@@ -34,7 +35,11 @@ const operations: QuickOpItem[] = [
   { icon: Tune,               label: '自定义',       gradient: 'from-gray-400 to-gray-600'       },
 ];
 
-export function QuickOperations() {
+interface QuickOperationsProps {
+  onPageChange?: (page: string) => void;
+}
+
+export function QuickOperations({ onPageChange }: QuickOperationsProps) {
   return (
     <div className="bg-white rounded-xl border border-gray-100">
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
@@ -51,6 +56,7 @@ export function QuickOperations() {
         {operations.map((op, index) => (
           <button
             key={index}
+            onClick={() => op.page && onPageChange?.(op.page)}
             className="group flex flex-col items-center gap-2 xl:gap-2.5 py-3 xl:py-4 px-1 rounded-2xl transition-all duration-200 hover:bg-gray-50 cursor-pointer"
           >
             {/* Icon tile */}

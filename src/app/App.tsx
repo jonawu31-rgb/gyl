@@ -17,7 +17,7 @@ import { SalesRanking } from "./components/SalesRanking";
 import { SalesAmountChart } from "./components/SalesAmountChart";
 import { Announcements } from "./components/Announcements";
 import { TodoList } from "./components/TodoList";
-import { Sidebar, menuItems } from "./components/Sidebar";
+import { Sidebar } from "./components/Sidebar";
 import { TabBar } from "./components/TabBar";
 import { Login } from "./components/Login";
 import { PartsData } from "./components/PartsData";
@@ -25,95 +25,36 @@ import { SalesOrder } from "./components/SalesOrder";
 import { QuotationOrder } from "./components/QuotationOrder";
 import { SalesCart } from "./components/SalesCart";
 import { SalesHistory } from "./components/SalesHistory";
+import { SalesQuotation } from "./components/SalesQuotation";
+import { CustomerData } from "./components/CustomerData";
+import { PartTagManagement } from "./components/PartTagManagement";
+import { DepartmentManagement } from "./components/DepartmentManagement";
+import { EmployeeManagement } from "./components/EmployeeManagement";
+import { RoleManagement } from "./components/RoleManagement";
+import { SystemConfig } from "./components/SystemConfig";
+import { UnitManagement } from "./components/UnitManagement";
+import { VehicleTypeManagement } from "./components/VehicleTypeManagement";
+import { CategoryManagement } from "./components/CategoryManagement";
+import { OriginManagement } from "./components/OriginManagement";
+import { BrandManagement } from "./components/BrandManagement";
+import { CategoryTypeManagement } from "./components/CategoryTypeManagement";
+import { RecentPurchaseCustomers } from "./components/RecentPurchaseCustomers";
+import { PrintTemplateManagement } from "./components/PrintTemplateManagement";
+import { DebtRecord } from "./components/DebtRecord";
+import { RuleSettings } from "./components/RuleSettings";
+import { RepaymentRecord } from "./components/RepaymentRecord";
+import { CustomerRefund } from "./components/CustomerRefund";
+import { CustomerAdvance } from "./components/CustomerAdvance";
+import { KitTemplateManagement } from "./components/KitTemplateManagement";
+import { CategorySummary } from "./components/CategorySummary";
+import { KitDisassembly } from "./components/KitDisassembly";
+import { KitAssembly } from "./components/KitAssembly";
+import { PaymentManagement } from "./components/PaymentManagement";
+import { VoidRecords } from "./components/VoidRecords";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState("首页");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  type SearchResult = {
-    label: string;
-    page: string;
-    path: string;
-  };
-
-  const normalize = (value: string) => value.trim().toLowerCase();
-
-  const fuzzyMatch = (source: string, query: string) => {
-    const normalizedSource = normalize(source);
-    const normalizedQuery = normalize(query);
-
-    if (!normalizedQuery) return false;
-    if (normalizedSource.includes(normalizedQuery)) return true;
-
-    let index = 0;
-    for (const char of normalizedQuery) {
-      index = normalizedSource.indexOf(char, index);
-      if (index === -1) return false;
-      index += 1;
-    }
-    return true;
-  };
-
-  const flattenMenuItems = (): SearchResult[] => {
-    const results: SearchResult[] = [];
-
-    for (const item of menuItems) {
-      const l1Page = item.page ?? item.label;
-      if (!item.children) {
-        results.push({
-          label: item.label,
-          page: l1Page,
-          path: item.label,
-        });
-        continue;
-      }
-
-      for (const child of item.children) {
-        const l2Page = child.page ?? child.label;
-        const l2Path = `${item.label} / ${child.label}`;
-
-        if (!child.children) {
-          results.push({
-            label: child.label,
-            page: l2Page,
-            path: l2Path,
-          });
-          continue;
-        }
-
-        for (const grandChild of child.children) {
-          results.push({
-            label: grandChild.label,
-            page: grandChild.page ?? grandChild.label,
-            path: `${l2Path} / ${grandChild.label}`,
-          });
-        }
-      }
-    }
-
-    return results;
-  };
-
-  const searchResults = searchQuery.trim()
-    ? flattenMenuItems()
-        .filter((item) => {
-          const query = searchQuery.trim();
-          return (
-            fuzzyMatch(item.label, query) ||
-            fuzzyMatch(item.page, query) ||
-            fuzzyMatch(item.path, query)
-          );
-        })
-        .slice(0, 8)
-    : [];
-
-  const openPage = (page: string) => {
-    setCurrentPage(page);
-    setSearchQuery("");
-    setSearchOpen(false);
-  };
 
   if (!isLoggedIn) {
     return <Login onLogin={() => setIsLoggedIn(true)} />;
@@ -127,53 +68,15 @@ export default function App() {
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-4 py-2 h-14 shrink-0">
           <div className="flex items-center justify-between gap-4 h-full">
-            <div className="relative flex-1 max-w-sm">
+            <div className="flex-1 max-w-sm">
               <div className="relative">
                 <SearchIcon sx={{ fontSize: 16 }} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="搜索订单、客户、商品..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setSearchOpen(true);
-                  }}
-                  onFocus={() => setSearchOpen(true)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      if (searchResults[0]) {
-                        openPage(searchResults[0].page);
-                      }
-                    }
-                    if (e.key === "Escape") {
-                      setSearchOpen(false);
-                    }
-                  }}
                   className="w-full pl-9 pr-4 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-gray-400"
                 />
               </div>
-              {searchOpen && searchQuery.trim() && (
-                <div className="absolute left-0 right-0 top-full mt-1 z-20 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
-                  {searchResults.length > 0 ? (
-                    <div className="max-h-80 overflow-auto py-1">
-                      {searchResults.map((item) => (
-                        <button
-                          key={`${item.page}-${item.path}`}
-                          type="button"
-                          onMouseDown={(e) => e.preventDefault()}
-                          onClick={() => openPage(item.page)}
-                          className="flex w-full flex-col items-start gap-0.5 px-3 py-2 text-left hover:bg-gray-50"
-                        >
-                          <span className="text-sm font-medium text-gray-800">{item.label}</span>
-                          <span className="text-[11px] text-gray-400">{item.path}</span>
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="px-3 py-3 text-sm text-gray-500">未找到匹配页面</div>
-                  )}
-                </div>
-              )}
             </div>
             <div className="flex items-center gap-2">
               <button className="relative p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
@@ -215,7 +118,7 @@ export default function App() {
 
                 {/* Quick Operations */}
                 <div className="shrink-0">
-                  <QuickOperations />
+                  <QuickOperations onPageChange={setCurrentPage} />
                 </div>
 
                 {/* Charts row — height clamps to viewport height */}
@@ -259,6 +162,110 @@ export default function App() {
           ) : currentPage === "销售历史订单" ? (
             <div className="h-full">
               <SalesHistory />
+            </div>
+          ) : currentPage === "销售/报价开单" ? (
+            <div className="h-full">
+              <SalesQuotation />
+            </div>
+          ) : currentPage === "客户资料" ? (
+            <div className="h-full">
+              <CustomerData />
+            </div>
+          ) : currentPage === "配件标签管理" ? (
+            <div className="h-full">
+              <PartTagManagement />
+            </div>
+          ) : currentPage === "部门管理" ? (
+            <div className="h-full">
+              <DepartmentManagement />
+            </div>
+          ) : currentPage === "员工管理" ? (
+            <div className="h-full">
+              <EmployeeManagement />
+            </div>
+          ) : currentPage === "角色管理" ? (
+            <div className="h-full">
+              <RoleManagement />
+            </div>
+          ) : currentPage === "系统配置" ? (
+            <div className="h-full">
+              <SystemConfig />
+            </div>
+          ) : currentPage === "单位管理" ? (
+            <div className="h-full">
+              <UnitManagement />
+            </div>
+          ) : currentPage === "车型管理" ? (
+            <div className="h-full">
+              <VehicleTypeManagement />
+            </div>
+          ) : currentPage === "类别管理" ? (
+            <div className="h-full">
+              <CategoryManagement />
+            </div>
+          ) : currentPage === "产地管理" ? (
+            <div className="h-full">
+              <OriginManagement />
+            </div>
+          ) : currentPage === "品牌管理" ? (
+            <div className="h-full">
+              <BrandManagement />
+            </div>
+          ) : currentPage === "品类管理" ? (
+            <div className="h-full">
+              <CategoryTypeManagement />
+            </div>
+          ) : currentPage === "近期采购客户" ? (
+            <div className="h-full">
+              <RecentPurchaseCustomers />
+            </div>
+          ) : currentPage === "打印模版" ? (
+            <div className="h-full">
+              <PrintTemplateManagement />
+            </div>
+          ) : currentPage === "挂账/欠款记录" ? (
+            <div className="h-full">
+              <DebtRecord />
+            </div>
+          ) : currentPage === "规则设置" ? (
+            <div className="h-full">
+              <RuleSettings />
+            </div>
+          ) : currentPage === "还款记录" ? (
+            <div className="h-full">
+              <RepaymentRecord />
+            </div>
+          ) : currentPage === "客户退货" ? (
+            <div className="h-full">
+              <CustomerRefund />
+            </div>
+          ) : currentPage === "客户预收款" ? (
+            <div className="h-full">
+              <CustomerAdvance />
+            </div>
+          ) : currentPage === "模版管理" ? (
+            <div className="h-full">
+              <KitTemplateManagement />
+            </div>
+          ) : currentPage === "套件组装" ? (
+            <div className="h-full">
+              <KitAssembly />
+            </div>
+          ) : currentPage === "套件拆装" ? (
+            <div className="h-full">
+              <KitDisassembly />
+            </div>
+          ) : currentPage === "品类汇总" ? (
+            <div className="h-full">
+              <CategorySummary />
+            </div>
+          ) : currentPage === "支付管理" ? (
+            <div className="h-full">
+              <PaymentManagement />
+            </div>
+          ) : currentPage === "作废单据" ? (
+            <div className="h-full">
+              <VoidRecords />
             </div>
           ) : (
             <div className="h-full flex items-center justify-center">

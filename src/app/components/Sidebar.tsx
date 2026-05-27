@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Logo } from "./Logo";
 import {
   Home as HomeIcon,
@@ -12,25 +12,25 @@ import {
   ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
 
-export interface Level3Item {
+interface Level3Item {
   label: string;
   page?: string;
 }
 
-export interface Level2Item {
+interface Level2Item {
   label: string;
   page?: string;
   children?: Level3Item[];
 }
 
-export interface MenuItem {
+interface MenuItem {
   icon: any;
   label: string;
   page?: string;
   children?: Level2Item[];
 }
 
-export const menuItems: MenuItem[] = [
+const menuItems: MenuItem[] = [
   { icon: HomeIcon, label: "首页", page: "首页" },
   {
     icon: PeopleIcon,
@@ -39,9 +39,9 @@ export const menuItems: MenuItem[] = [
       {
         label: "员工设置",
         children: [
-          { label: "员工管理" },
-          { label: "部门管理" },
-          { label: "角色管理" },
+          { label: "员工管理", page: "员工管理" },
+          { label: "部门管理", page: "部门管理" },
+          { label: "角色管理", page: "角色管理" },
         ],
       },
       {
@@ -65,13 +65,13 @@ export const menuItems: MenuItem[] = [
       {
         label: "基本资料",
         children: [
-          { label: "单位管理" },
-          { label: "车型管理" },
-          { label: "类别管理" },
-          { label: "支付管理" },
-          { label: "规则设置" },
-          { label: "打印模版" },
-          { label: "系统配置" },
+          { label: "单位管理", page: "单位管理" },
+          { label: "车型管理", page: "车型管理" },
+          { label: "类别管理", page: "类别管理" },
+          { label: "支付管理", page: "支付管理" },
+          { label: "规则设置", page: "规则设置" },
+          { label: "打印模版", page: "打印模版" },
+          { label: "系统配置", page: "系统配置" },
         ],
       },
       {
@@ -91,11 +91,11 @@ export const menuItems: MenuItem[] = [
         label: "商品管理",
         children: [
           { label: "配件资料", page: "配件资料" },
-          { label: "产地管理" },
-          { label: "品牌管理" },
+          { label: "产地管理", page: "产地管理" },
+          { label: "品牌管理", page: "品牌管理" },
           { label: "通用件管理" },
-          { label: "品类管理" },
-          { label: "配件标签管理" },
+          { label: "品类管理", page: "品类管理" },
+          { label: "配件标签管理", page: "配件标签管理" },
         ],
       },
       {
@@ -120,9 +120,9 @@ export const menuItems: MenuItem[] = [
       {
         label: "套件管理",
         children: [
-          { label: "模版管理" },
-          { label: "套件组装" },
-          { label: "套件拆装" },
+          { label: "模版管理", page: "模版管理" },
+          { label: "套件组装", page: "套件组装" },
+          { label: "套件拆装", page: "套件拆装" },
         ],
       },
     ],
@@ -134,23 +134,24 @@ export const menuItems: MenuItem[] = [
       {
         label: "客户管理",
         children: [
-          { label: "客户资料" },
+          { label: "客户资料", page: "客户资料" },
           { label: "客户拜访登记" },
           { label: "客户拜访审核" },
           { label: "客户贡献率" },
+          { label: "近期采购客户", page: "近期采购客户" },
         ],
       },
       {
         label: "销售业务",
         children: [
-          { label: "销售/报价开单", page: "销售单" },
-          { label: "销售历史订单" },
+          { label: "销售/报价开单", page: "销售/报价开单" },
+          { label: "销售历史订单", page: "销售历史订单" },
           { label: "报价/草稿单据", page: "报价订单" },
           { label: "销售手推车", page: "销售手推车" },
-          { label: "作废单据" },
-          { label: "挂账/欠款记录" },
-          { label: "还款记录" },
-          { label: "客户退货" },
+          { label: "作废单据", page: "作废单据" },
+          { label: "挂账/欠款记录", page: "挂账/欠款记录" },
+          { label: "还款记录", page: "还款记录" },
+          { label: "客户退货", page: "客户退货" },
           { label: "采购流失比" },
         ],
       },
@@ -168,8 +169,8 @@ export const menuItems: MenuItem[] = [
           { label: "采购应付" },
           { label: "采购统计" },
           { label: "毛利统计" },
-          { label: "品类汇总" },
-          { label: "客户预收款" },
+          { label: "品类汇总", page: "品类汇总" },
+          { label: "客户预收款", page: "客户预收款" },
           { label: "客户欠款" },
           { label: "供应商预付款" },
         ],
@@ -215,44 +216,6 @@ interface SidebarProps {
 export function Sidebar({ currentPage, onPageChange }: SidebarProps) {
   const [expandedL1, setExpandedL1] = useState<string>("");
   const [expandedL2, setExpandedL2] = useState<string>("");
-
-  useEffect(() => {
-    let nextExpandedL1 = "";
-    let nextExpandedL2 = "";
-
-    for (const item of menuItems) {
-      if ((item.page ?? item.label) === currentPage) {
-        nextExpandedL1 = "";
-        nextExpandedL2 = "";
-        break;
-      }
-
-      if (!item.children) continue;
-
-      const l2Match = item.children.find((child) => (child.page ?? child.label) === currentPage);
-      if (l2Match) {
-        nextExpandedL1 = item.label;
-        nextExpandedL2 = "";
-        break;
-      }
-
-      for (const child of item.children) {
-        if (!child.children) continue;
-
-        const l3Match = child.children.find((grandChild) => (grandChild.page ?? grandChild.label) === currentPage);
-        if (l3Match) {
-          nextExpandedL1 = item.label;
-          nextExpandedL2 = child.label;
-          break;
-        }
-      }
-
-      if (nextExpandedL1) break;
-    }
-
-    setExpandedL1(nextExpandedL1);
-    setExpandedL2(nextExpandedL2);
-  }, [currentPage]);
 
   const handleL1Click = (item: MenuItem) => {
     if (item.children) {
