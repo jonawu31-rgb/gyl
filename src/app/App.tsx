@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import {
   Notifications as NotificationsIcon,
   Fullscreen as FullscreenIcon,
@@ -52,9 +52,96 @@ import { KitAssembly } from "./components/KitAssembly";
 import { PaymentManagement } from "./components/PaymentManagement";
 import { VoidRecords } from "./components/VoidRecords";
 
+type SearchTarget = {
+  label: string;
+  page: string;
+  category: string;
+  keywords?: string[];
+};
+
+const searchTargets: SearchTarget[] = [
+  { label: "首页", page: "首页", category: "首页" },
+  { label: "配件资料", page: "配件资料", category: "商品/仓库", keywords: ["配件", "商品资料", "库存"] },
+  { label: "销售/报价开单", page: "销售/报价开单", category: "客户/销售", keywords: ["销售单", "报价开单", "开单"] },
+  { label: "销售历史订单", page: "销售历史订单", category: "客户/销售", keywords: ["历史订单", "订单查询"] },
+  { label: "销售手推车", page: "销售手推车", category: "客户/销售", keywords: ["购物车", "手推车"] },
+  { label: "报价/草稿单据", page: "报价订单", category: "客户/销售", keywords: ["报价订单", "草稿单据", "报价单"] },
+  { label: "作废单据", page: "作废单据", category: "客户/销售", keywords: ["作废", "废单"] },
+  { label: "挂账/欠款记录", page: "挂账/欠款记录", category: "客户/销售", keywords: ["挂账", "欠款"] },
+  { label: "还款记录", page: "还款记录", category: "客户/销售", keywords: ["还款", "回款"] },
+  { label: "客户退货", page: "客户退货", category: "客户/销售", keywords: ["退货", "售后"] },
+  { label: "客户资料", page: "客户资料", category: "客户/销售", keywords: ["客户", "客户档案"] },
+  { label: "近期采购客户", page: "近期采购客户", category: "客户/销售", keywords: ["近期客户", "采购客户"] },
+  { label: "客户预收款", page: "客户预收款", category: "财务/资金", keywords: ["预收款", "预收", "客户资金"] },
+  { label: "品类汇总", page: "品类汇总", category: "财务/资金", keywords: ["品类", "汇总"] },
+  { label: "支付管理", page: "支付管理", category: "资料/设置", keywords: ["支付", "收款方式"] },
+  { label: "规则设置", page: "规则设置", category: "资料/设置", keywords: ["规则", "配置"] },
+  { label: "打印模版", page: "打印模版", category: "资料/设置", keywords: ["打印模板", "模版", "模板"] },
+  { label: "系统配置", page: "系统配置", category: "资料/设置", keywords: ["系统", "配置"] },
+  { label: "单位管理", page: "单位管理", category: "资料/设置", keywords: ["单位", "单位设置"] },
+  { label: "车型管理", page: "车型管理", category: "资料/设置", keywords: ["车型", "车系"] },
+  { label: "类别管理", page: "类别管理", category: "资料/设置", keywords: ["分类", "类别"] },
+  { label: "产地管理", page: "产地管理", category: "商品/仓库", keywords: ["产地", "原产地"] },
+  { label: "品牌管理", page: "品牌管理", category: "商品/仓库", keywords: ["品牌"] },
+  { label: "品类管理", page: "品类管理", category: "商品/仓库", keywords: ["品类", "分类管理"] },
+  { label: "配件标签管理", page: "配件标签管理", category: "商品/仓库", keywords: ["标签", "配件标签"] },
+  { label: "模版管理", page: "模版管理", category: "套件管理", keywords: ["模板管理", "模板", "模版"] },
+  { label: "套件组装", page: "套件组装", category: "套件管理", keywords: ["组装"] },
+  { label: "套件拆装", page: "套件拆装", category: "套件管理", keywords: ["拆装", "拆件"] },
+  { label: "部门管理", page: "部门管理", category: "员工/绩效", keywords: ["部门", "组织"] },
+  { label: "员工管理", page: "员工管理", category: "员工/绩效", keywords: ["员工", "人员"] },
+  { label: "角色管理", page: "角色管理", category: "员工/绩效", keywords: ["角色", "权限"] },
+];
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState("首页");
+  const [searchValue, setSearchValue] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchBoxRef = useRef<HTMLDivElement | null>(null);
+
+  const searchResults = useMemo(() => {
+    const query = searchValue.trim().toLowerCase();
+
+    if (!query) return [];
+
+    return searchTargets.filter((target) => {
+      const haystacks = [
+        target.label,
+        target.page,
+        target.category,
+        ...(target.keywords ?? []),
+      ];
+
+      return haystacks.some((text) => text.toLowerCase().includes(query));
+    });
+  }, [searchValue]);
+
+  useEffect(() => {
+    const onPointerDown = (event: PointerEvent) => {
+      if (!searchBoxRef.current) return;
+      if (!searchBoxRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, []);
+
+  const handleSearchSelect = (page: string, label: string) => {
+    setCurrentPage(page);
+    setSearchValue(label);
+    setIsSearchOpen(false);
+  };
+
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return;
+
+    if (searchResults.length > 0) {
+      handleSearchSelect(searchResults[0].page, searchResults[0].label);
+    }
+  };
 
   if (!isLoggedIn) {
     return <Login onLogin={() => setIsLoggedIn(true)} />;
@@ -68,15 +155,53 @@ export default function App() {
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-4 py-2 h-14 shrink-0">
           <div className="flex items-center justify-between gap-4 h-full">
-            <div className="flex-1 max-w-sm">
+            <div ref={searchBoxRef} className="flex-1 max-w-sm relative">
               <div className="relative">
                 <SearchIcon sx={{ fontSize: 16 }} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="搜索订单、客户、商品..."
+                  value={searchValue}
+                  onChange={(event) => {
+                    setSearchValue(event.target.value);
+                    setIsSearchOpen(true);
+                  }}
+                  onFocus={() => setIsSearchOpen(true)}
+                  onKeyDown={handleSearchKeyDown}
                   className="w-full pl-9 pr-4 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-gray-400"
                 />
               </div>
+              {isSearchOpen && searchValue.trim() && (
+                <div className="absolute left-0 right-0 top-full mt-2 z-50 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl shadow-gray-200/70">
+                  {searchResults.length > 0 ? (
+                    <div className="max-h-72 overflow-auto py-1">
+                      {searchResults.map((item) => (
+                        <button
+                          key={`${item.page}-${item.label}`}
+                          type="button"
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            handleSearchSelect(item.page, item.label);
+                          }}
+                          className="flex w-full items-start gap-3 px-3 py-2 text-left transition-colors hover:bg-blue-50"
+                        >
+                          <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#18b7de] to-[#2e63ff] text-[11px] font-semibold text-white">
+                            {item.label.slice(0, 2)}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm font-medium text-gray-800">{item.label}</div>
+                            <div className="mt-0.5 text-[11px] text-gray-400">{item.category}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="px-3 py-4 text-sm text-gray-500">
+                      未找到相关页面，请换个关键词试试。
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <button className="relative p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
