@@ -175,29 +175,23 @@ export function PaymentManagement() {
         <h2 className="text-lg font-bold text-gray-800">支付管理</h2>
       </div>
 
-      <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 shrink-0">
-        <div className="flex items-center gap-2">
-          <button onClick={() => { setEditTarget(null); setDialogOpen(true); }}
-            className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5">
-            <AddIcon sx={{ fontSize: 16 }} />新增支付方式
+      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 shrink-0">
+        <div className="flex items-center gap-3 flex-wrap">
+          <input type="text" placeholder="支付方式名称" value={keyword} onChange={(e) => setKeyword(e.target.value)}
+            className="w-48 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder:text-gray-400"
+          />
+          <button onClick={() => {}} className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+            <SearchIcon sx={{ fontSize: 15 }} />搜索
           </button>
-          <div className="w-px h-6 bg-gray-300" />
-          <button onClick={() => setKeyword("")}
-            className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5">
-            <RefreshIcon sx={{ fontSize: 16 }} />重置
-          </button>
+          <button onClick={() => setKeyword("")} className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 shrink-0">重置</button>
         </div>
       </div>
 
-      <div className="px-4 py-2.5 border-b border-gray-200 shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="relative w-60">
-            <SearchIcon sx={{ fontSize: 16 }} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input type="text" placeholder="搜索支付方式名称..." value={keyword} onChange={(e) => setKeyword(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400 bg-gray-50 focus:bg-white" />
-          </div>
-          <span className="text-xs text-gray-400">共 {filtered.length} 条</span>
-        </div>
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <button onClick={() => { setEditTarget(null); setDialogOpen(true); }}
+          className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5">
+          <AddIcon sx={{ fontSize: 16 }} />新增支付方式
+        </button>
       </div>
 
       <div className="flex-1 overflow-auto min-h-0">
@@ -243,7 +237,7 @@ export function PaymentManagement() {
       </div>
 
       <div className="px-4 py-2.5 border-t border-gray-200 bg-gray-50 shrink-0">
-        <p className="text-xs text-gray-400">共 {methods.length} 种支付方式 · 停用的支付方式不会显示在业务单据中</p>
+        <p className="text-xs text-gray-400">停用的支付方式不会显示在业务单据中</p>
       </div>
 
       <PaymentDialog open={dialogOpen} onClose={() => { setDialogOpen(false); setEditTarget(null); }} onSave={handleSave} editData={editTarget} />

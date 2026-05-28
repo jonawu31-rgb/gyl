@@ -211,7 +211,7 @@ const RevenueSummary: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <div className="flex-1 p-4 space-y-4">
+      <div className="flex-1 p-3 space-y-3">
         {/* Filter bar */}
         <div className="bg-white border border-gray-200 rounded-lg px-4 py-3 flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
@@ -241,11 +241,11 @@ const RevenueSummary: React.FC = () => {
         </div>
 
         {/* KPI cards */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {/* Profit overview */}
-          <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="text-sm font-semibold text-gray-700 mb-3 pb-2 border-b border-gray-100">利润概览</div>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white border border-gray-200 rounded-lg p-3">
+            <div className="text-sm font-semibold text-gray-700 mb-2 pb-2 border-b border-gray-100">利润概览</div>
+            <div className="grid grid-cols-2 gap-3">
               {[
                 { label: "收入", value: `¥${formatAmount(totalRevenue)}`, color: "text-blue-600" },
                 { label: "成本", value: `¥${formatAmount(totalCost)}`, color: "text-orange-600" },
@@ -261,9 +261,9 @@ const RevenueSummary: React.FC = () => {
           </div>
 
           {/* Revenue overview */}
-          <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="text-sm font-semibold text-gray-700 mb-3 pb-2 border-b border-gray-100">营收汇总</div>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white border border-gray-200 rounded-lg p-3">
+            <div className="text-sm font-semibold text-gray-700 mb-2 pb-2 border-b border-gray-100">营收汇总</div>
+            <div className="grid grid-cols-2 gap-3">
               {[
                 { label: "营业额", value: `¥${formatAmount(totalRevenue * 1.08)}`, color: "text-blue-600" },
                 { label: "实收金额", value: `¥${formatAmount(totalRevenue * 0.95)}`, color: "text-green-600" },

@@ -282,8 +282,8 @@ const CreateTab: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Top toolbar */}
-      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 shrink-0">
+      {/* Filter bar */}
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 shrink-0">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-52 flex-1">
             <SearchIcon sx={{ fontSize: 16 }} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -291,10 +291,6 @@ const CreateTab: React.FC = () => {
               onChange={e => { setSearchText(e.target.value); setCurrentPage(1); }}
               className="w-full pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder:text-gray-400 bg-white" />
           </div>
-          <button onClick={() => setSettingsOpen(true)}
-            className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-1">
-            <AddIcon sx={{ fontSize: 16 }} />新增
-          </button>
           <FauxSelect value={vehicleType} onChange={e => setVehicleType(e.target.value)} className="w-36 px-2 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-blue-400">
             <option value="">请选择适用车型</option>
             {mockVehicleTypes.map(v => <option key={v} value={v}>{v}</option>)}
@@ -303,6 +299,15 @@ const CreateTab: React.FC = () => {
             <option value="">请选择默认仓库</option>
             {mockWarehouses.map(w => <option key={w} value={w}>{w}</option>)}
           </FauxSelect>
+        </div>
+      </div>
+      {/* Action bar */}
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={() => setSettingsOpen(true)}
+            className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-1 shadow-sm">
+            <AddIcon sx={{ fontSize: 16 }} />新增
+          </button>
           <div className="w-px h-5 bg-gray-300" />
           <button onClick={() => alert("下载模板")} className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5">
             <FileDownloadIcon sx={{ fontSize: 15 }} />下载模板

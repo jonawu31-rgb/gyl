@@ -65,6 +65,36 @@ import TransferManagement from "./components/TransferManagement";
 import PurchaseManagement from "./components/PurchaseManagement";
 import RevenueSummary from "./components/RevenueSummary";
 import CustomerDebt from "./components/CustomerDebt";
+import SlowInventory from "./components/SlowInventory";
+import { ProductSalesRanking } from "./components/ProductSalesRanking";
+import { InventoryTurnover } from "./components/InventoryTurnover";
+import { PurchaseLossRatio } from "./components/PurchaseLossRatio";
+import { InventoryWarning } from "./components/InventoryWarning";
+import { LogisticsCompany } from "./components/LogisticsCompany";
+import { DeliveryVehicles } from "./components/DeliveryVehicles";
+import { PickingManagement } from "./components/PickingManagement";
+import { PackagingManagement } from "./components/PackagingManagement";
+import { ShippingManagement } from "./components/ShippingManagement";
+import { PurchaseAmountRanking } from "./components/PurchaseAmountRanking";
+import { CommissionSettings } from "./components/CommissionSettings";
+import { CategoryCommission } from "./components/CategoryCommission";
+import { SalaryReport } from "./components/SalaryReport";
+import { CustomerVisitRecord } from "./components/CustomerVisitRecord";
+import { CustomerVisitApproval } from "./components/CustomerVisitApproval";
+import { CustomerContribution } from "./components/CustomerContribution";
+import { UniversalPartManagement } from "./components/UniversalPartManagement";
+import { MessageList } from "./components/MessageList";
+import { MessageSettings } from "./components/MessageSettings";
+import { WarehouseManagement } from "./components/WarehouseManagement";
+import { SupplierManagement } from "./components/SupplierManagement";
+import { SupplierPrepayment } from "./components/SupplierPrepayment";
+import { StockQuery } from "./components/StockQuery";
+import { GrossProfitStats } from "./components/GrossProfitStats";
+import { ProcurementStats } from "./components/ProcurementStats";
+import { ProcurementPayable } from "./components/ProcurementPayable";
+import { ExpenseOutlay } from "./components/ExpenseOutlay";
+import { IncomeExpense } from "./components/IncomeExpense";
+import { ExpenseReimbursement } from "./components/ExpenseReimbursement";
 
 type SearchTarget = {
   label: string;
@@ -284,6 +314,168 @@ const searchTargets: SearchTarget[] = [
     page: "客户欠款",
     category: "财务/资金",
     keywords: ["欠款", "还款", "客户债务"],
+  },
+  {
+    label: "商品销售排行",
+    page: "商品销售排行",
+    category: "商品/仓库",
+    keywords: ["销售排行", "销量排行", "热销商品"],
+  },
+  {
+    label: "库存周转率",
+    page: "库存周转率",
+    category: "商品/仓库",
+    keywords: ["周转率", "周转天数", "库存分析"],
+  },
+  {
+    label: "采购流失比",
+    page: "采购流失比",
+    category: "客户/销售",
+    keywords: ["流失", "采购流失", "客户流失分析"],
+  },
+  {
+    label: "库存预警",
+    page: "库存预警",
+    category: "商品/仓库",
+    keywords: ["预警", "库存预警", "安全库存", "最低库存"],
+  },
+  {
+    label: "滞销库存",
+    page: "滞销库存",
+    category: "商品/仓库",
+    keywords: ["滞销", "积压", "库存滞销"],
+  },
+  {
+    label: "采购金额排行",
+    page: "采购金额排行",
+    category: "商品/仓库",
+    keywords: ["采购排行", "供应商排行", "采购金额"],
+  },
+  {
+    label: "单据提成设置",
+    page: "单据提成设置",
+    category: "员工/绩效",
+    keywords: ["提成", "单据提成", "每单提成"],
+  },
+  {
+    label: "分类提成设置",
+    page: "分类提成设置",
+    category: "员工/绩效",
+    keywords: ["分类提成", "品类提成", "阶梯提成"],
+  },
+  {
+    label: "工资报表",
+    page: "工资报表",
+    category: "员工/绩效",
+    keywords: ["工资", "薪资", "薪酬"],
+  },
+  {
+    label: "客户拜访登记",
+    page: "客户拜访登记",
+    category: "客户/销售",
+    keywords: ["拜访", "拜访登记", "客户拜访"],
+  },
+  {
+    label: "客户拜访审核",
+    page: "客户拜访审核",
+    category: "客户/销售",
+    keywords: ["拜访审核", "审批", "拜访审批"],
+  },
+  {
+    label: "客户贡献率",
+    page: "客户贡献率",
+    category: "客户/销售",
+    keywords: ["贡献率", "销售贡献", "利润贡献"],
+  },
+  {
+    label: "通用件管理",
+    page: "通用件管理",
+    category: "商品/仓库",
+    keywords: ["通用件", "替代件", "互换件"],
+  },
+  {
+    label: "消息列表",
+    page: "消息列表",
+    category: "资料/设置",
+    keywords: ["消息", "通知", "消息列表"],
+  },
+  {
+    label: "消息设置",
+    page: "消息设置",
+    category: "资料/设置",
+    keywords: ["消息设置", "通知设置", "接收角色"],
+  },
+  {
+    label: "仓库管理",
+    page: "仓库管理",
+    category: "商品/仓库",
+    keywords: ["仓库", "库位", "库房"],
+  },
+  {
+    label: "供应商管理",
+    page: "供应商管理",
+    category: "商品/仓库",
+    keywords: ["供应商", "厂商", "进货商"],
+  },
+  {
+    label: "库存查询",
+    page: "库存查询",
+    category: "商品/仓库",
+    keywords: ["库存", "收发明细", "库存查询"],
+  },
+  {
+    label: "毛利统计",
+    page: "毛利统计",
+    category: "财务/资金",
+    keywords: ["毛利", "利润", "毛利率", "品类业绩"],
+  },
+  {
+    label: "采购统计",
+    page: "采购统计",
+    category: "财务/资金",
+    keywords: ["采购统计", "采购汇总", "欠款统计"],
+  },
+  {
+    label: "采购应付",
+    page: "采购应付",
+    category: "财务/资金",
+    keywords: ["应付", "欠款", "采购应付", "还款记录"],
+  },
+  {
+    label: "供应商预付款",
+    page: "供应商预付款",
+    category: "财务/资金",
+    keywords: ["预付款", "供应商预付", "预付"],
+  },
+  {
+    label: "物流公司资料",
+    page: "物流公司资料",
+    category: "物流/配送",
+    keywords: ["物流公司", "快递公司", "承运商"],
+  },
+  {
+    label: "配送车辆",
+    page: "配送车辆",
+    category: "物流/配送",
+    keywords: ["车辆", "配送车", "司机"],
+  },
+  {
+    label: "拣货管理",
+    page: "拣货管理",
+    category: "物流/配送",
+    keywords: ["拣货", "拣货员", "拣货任务"],
+  },
+  {
+    label: "打包装箱",
+    page: "打包装箱",
+    category: "物流/配送",
+    keywords: ["打包", "装箱", "打包箱"],
+  },
+  {
+    label: "发货管理",
+    page: "发货管理",
+    category: "物流/配送",
+    keywords: ["发货", "出货", "发货记录"],
   },
   {
     label: "部门管理",
@@ -712,6 +904,126 @@ export default function App() {
           ) : currentPage === "客户欠款" ? (
             <div className="h-full">
               <CustomerDebt />
+            </div>
+          ) : currentPage === "商品销售排行" ? (
+            <div className="h-full">
+              <ProductSalesRanking />
+            </div>
+          ) : currentPage === "库存周转率" ? (
+            <div className="h-full">
+              <InventoryTurnover />
+            </div>
+          ) : currentPage === "采购流失比" ? (
+            <div className="h-full">
+              <PurchaseLossRatio />
+            </div>
+          ) : currentPage === "库存预警" ? (
+            <div className="h-full">
+              <InventoryWarning />
+            </div>
+          ) : currentPage === "滞销库存" ? (
+            <div className="h-full">
+              <SlowInventory />
+            </div>
+          ) : currentPage === "采购金额排行" ? (
+            <div className="h-full">
+              <PurchaseAmountRanking />
+            </div>
+          ) : currentPage === "单据提成设置" ? (
+            <div className="h-full">
+              <CommissionSettings />
+            </div>
+          ) : currentPage === "分类提成设置" ? (
+            <div className="h-full">
+              <CategoryCommission />
+            </div>
+          ) : currentPage === "工资报表" ? (
+            <div className="h-full">
+              <SalaryReport />
+            </div>
+          ) : currentPage === "物流公司资料" ? (
+            <div className="h-full">
+              <LogisticsCompany />
+            </div>
+          ) : currentPage === "配送车辆" ? (
+            <div className="h-full">
+              <DeliveryVehicles />
+            </div>
+          ) : currentPage === "拣货管理" ? (
+            <div className="h-full">
+              <PickingManagement />
+            </div>
+          ) : currentPage === "打包装箱" ? (
+            <div className="h-full">
+              <PackagingManagement />
+            </div>
+          ) : currentPage === "发货管理" ? (
+            <div className="h-full">
+              <ShippingManagement />
+            </div>
+          ) : currentPage === "客户拜访登记" ? (
+            <div className="h-full">
+              <CustomerVisitRecord />
+            </div>
+          ) : currentPage === "客户拜访审核" ? (
+            <div className="h-full">
+              <CustomerVisitApproval />
+            </div>
+          ) : currentPage === "客户贡献率" ? (
+            <div className="h-full">
+              <CustomerContribution />
+            </div>
+          ) : currentPage === "通用件管理" ? (
+            <div className="h-full">
+              <UniversalPartManagement />
+            </div>
+          ) : currentPage === "消息列表" ? (
+            <div className="h-full">
+              <MessageList />
+            </div>
+          ) : currentPage === "消息设置" ? (
+            <div className="h-full">
+              <MessageSettings />
+            </div>
+          ) : currentPage === "仓库管理" ? (
+            <div className="h-full">
+              <WarehouseManagement />
+            </div>
+          ) : currentPage === "供应商管理" ? (
+            <div className="h-full">
+              <SupplierManagement />
+            </div>
+          ) : currentPage === "供应商预付款" ? (
+            <div className="h-full">
+              <SupplierPrepayment />
+            </div>
+          ) : currentPage === "库存查询" ? (
+            <div className="h-full">
+              <StockQuery />
+            </div>
+          ) : currentPage === "毛利统计" ? (
+            <div className="h-full">
+              <GrossProfitStats />
+            </div>
+          ) : currentPage === "采购统计" ? (
+            <div className="h-full">
+              <ProcurementStats />
+            </div>
+          ) : currentPage === "采购应付" ? (
+            <div className="h-full">
+              <ProcurementPayable />
+            </div>
+          ) : currentPage === "支出费用" ? (
+            <div className="h-full">
+              <ExpenseOutlay />
+            </div>
+          ) : currentPage === "收入费用" ? (
+            <div className="h-full">
+              <IncomeExpense />
+            </div>
+          ) : currentPage === "费用报销" ? (
+            <div className="h-full">
+              <ExpenseReimbursement />
             </div>
           ) : (
             <div className="h-full flex items-center justify-center">

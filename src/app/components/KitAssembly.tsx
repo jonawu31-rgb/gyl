@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
-import { X, Search, Calendar, Plus, Eye, Ban } from 'lucide-react';
-import { FauxSelect } from './ui/FauxSelect';
+import { useState } from "react";
+import {
+  Add as AddIcon,
+  Search as SearchIcon,
+  Refresh as RefreshIcon,
+  Visibility as ViewIcon,
+  Block as VoidIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface KitPart {
   partId: string;
@@ -20,7 +27,7 @@ interface AssemblyRecord {
   assemblyDate: string;
   totalCost: number;
   operator: string;
-  status: '已组装' | '已作废';
+  status: "已组装" | "已作废";
   remark: string;
   parts: KitPart[];
 }
@@ -33,712 +40,477 @@ interface KitTemplate {
 
 const mockTemplates: KitTemplate[] = [
   {
-    templateId: 'TPL001',
-    name: '标准套件A',
+    templateId: "TPL001",
+    name: "标准套件A",
     parts: [
-      { partId: 'P001', partName: '前刹车片', partCode: 'BRK001', spec: '通用型', quantity: 4, unitCost: 45, subtotal: 180, stock: 100 },
-      { partId: 'P002', partName: '机油滤清器', partCode: 'OIL001', spec: '标准型', quantity: 1, unitCost: 25, subtotal: 25, stock: 50 },
-    ]
+      { partId: "P001", partName: "前刹车片",   partCode: "BRK001", spec: "通用型", quantity: 4, unitCost: 45, subtotal: 180, stock: 100 },
+      { partId: "P002", partName: "机油滤清器", partCode: "OIL001", spec: "标准型", quantity: 1, unitCost: 25, subtotal: 25,  stock: 50  },
+    ],
   },
   {
-    templateId: 'TPL002',
-    name: '高级套件B',
+    templateId: "TPL002",
+    name: "高级套件B",
     parts: [
-      { partId: 'P003', partName: '空气滤清器', partCode: 'AIR001', spec: '高效型', quantity: 1, unitCost: 35, subtotal: 35, stock: 80 },
-      { partId: 'P004', partName: '火花塞', partCode: 'SPK001', spec: '铂金', quantity: 4, unitCost: 28, subtotal: 112, stock: 200 },
-    ]
-  }
+      { partId: "P003", partName: "空气滤清器", partCode: "AIR001", spec: "高效型", quantity: 1, unitCost: 35, subtotal: 35,  stock: 80  },
+      { partId: "P004", partName: "火花塞",     partCode: "SPK001", spec: "铂金",   quantity: 4, unitCost: 28, subtotal: 112, stock: 200 },
+    ],
+  },
 ];
 
 const mockAvailableParts: KitPart[] = [
-  { partId: 'P001', partName: '前刹车片', partCode: 'BRK001', spec: '通用型', quantity: 0, unitCost: 45, subtotal: 0, stock: 100 },
-  { partId: 'P002', partName: '机油滤清器', partCode: 'OIL001', spec: '标准型', quantity: 0, unitCost: 25, subtotal: 0, stock: 50 },
-  { partId: 'P003', partName: '空气滤清器', partCode: 'AIR001', spec: '高效型', quantity: 0, unitCost: 35, subtotal: 0, stock: 80 },
-  { partId: 'P004', partName: '火花塞', partCode: 'SPK001', spec: '铂金', quantity: 0, unitCost: 28, subtotal: 0, stock: 200 },
-  { partId: 'P005', partName: '后刹车片', partCode: 'BRK002', spec: '通用型', quantity: 0, unitCost: 50, subtotal: 0, stock: 75 },
+  { partId: "P001", partName: "前刹车片",   partCode: "BRK001", spec: "通用型", quantity: 0, unitCost: 45, subtotal: 0, stock: 100 },
+  { partId: "P002", partName: "机油滤清器", partCode: "OIL001", spec: "标准型", quantity: 0, unitCost: 25, subtotal: 0, stock: 50  },
+  { partId: "P003", partName: "空气滤清器", partCode: "AIR001", spec: "高效型", quantity: 0, unitCost: 35, subtotal: 0, stock: 80  },
+  { partId: "P004", partName: "火花塞",     partCode: "SPK001", spec: "铂金",   quantity: 0, unitCost: 28, subtotal: 0, stock: 200 },
+  { partId: "P005", partName: "后刹车片",   partCode: "BRK002", spec: "通用型", quantity: 0, unitCost: 50, subtotal: 0, stock: 75  },
 ];
 
 const mockRecords: AssemblyRecord[] = [
   {
-    assemblyId: 'ASM20260528001',
-    kitName: '标准套件A',
-    quantity: 10,
-    assemblyDate: '2026-05-28',
-    totalCost: 2050,
-    operator: '张三',
-    status: '已组装',
-    remark: '常规组装',
+    assemblyId: "ASM20260528001", kitName: "标准套件A", quantity: 10,
+    assemblyDate: "2026-05-28", totalCost: 2050, operator: "张三",
+    status: "已组装", remark: "常规组装",
     parts: [
-      { partId: 'P001', partName: '前刹车片', partCode: 'BRK001', spec: '通用型', quantity: 40, unitCost: 45, subtotal: 1800, stock: 100 },
-      { partId: 'P002', partName: '机油滤清器', partCode: 'OIL001', spec: '标准型', quantity: 10, unitCost: 25, subtotal: 250, stock: 50 },
-    ]
+      { partId: "P001", partName: "前刹车片",   partCode: "BRK001", spec: "通用型", quantity: 40, unitCost: 45, subtotal: 1800, stock: 100 },
+      { partId: "P002", partName: "机油滤清器", partCode: "OIL001", spec: "标准型", quantity: 10, unitCost: 25, subtotal: 250,  stock: 50  },
+    ],
   },
   {
-    assemblyId: 'ASM20260527001',
-    kitName: '高级套件B',
-    quantity: 5,
-    assemblyDate: '2026-05-27',
-    totalCost: 735,
-    operator: '李四',
-    status: '已组装',
-    remark: '',
+    assemblyId: "ASM20260527001", kitName: "高级套件B", quantity: 5,
+    assemblyDate: "2026-05-27", totalCost: 735, operator: "李四",
+    status: "已组装", remark: "",
     parts: [
-      { partId: 'P003', partName: '空气滤清器', partCode: 'AIR001', spec: '高效型', quantity: 5, unitCost: 35, subtotal: 175, stock: 80 },
-      { partId: 'P004', partName: '火花塞', partCode: 'SPK001', spec: '铂金', quantity: 20, unitCost: 28, subtotal: 560, stock: 200 },
-    ]
+      { partId: "P003", partName: "空气滤清器", partCode: "AIR001", spec: "高效型", quantity: 5,  unitCost: 35, subtotal: 175, stock: 80  },
+      { partId: "P004", partName: "火花塞",     partCode: "SPK001", spec: "铂金",   quantity: 20, unitCost: 28, subtotal: 560, stock: 200 },
+    ],
   },
 ];
 
-const KitAssembly: React.FC = () => {
-  const [records, setRecords] = useState<AssemblyRecord[]>(mockRecords);
-  const [searchText, setSearchText] = useState('');
-  const [dateRange, setDateRange] = useState<[string, string]>(['', '']);
-  const [statusFilter, setStatusFilter] = useState('全部');
-  const [showAddDialog, setShowAddDialog] = useState(false);
-  const [showPartsDialog, setShowPartsDialog] = useState(false);
-  const [showDetailDialog, setShowDetailDialog] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState<AssemblyRecord | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
-
-  // Filter records
-  const filteredRecords = records.filter(record => {
-    const matchesSearch = !searchText || 
-      record.kitName.includes(searchText) || 
-      record.assemblyId.includes(searchText);
-    const matchesStatus = statusFilter === '全部' || record.status === statusFilter;
-    const matchesDate = (!dateRange[0] || record.assemblyDate >= dateRange[0]) &&
-                       (!dateRange[1] || record.assemblyDate <= dateRange[1]);
-    return matchesSearch && matchesStatus && matchesDate;
-  });
-
-  const totalPages = Math.ceil(filteredRecords.length / itemsPerPage);
-  const paginatedRecords = filteredRecords.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const handleVoid = (record: AssemblyRecord) => {
-    if (window.confirm(`确定要作废组装单 ${record.assemblyId} 吗？`)) {
-      setRecords(records.map(r => 
-        r.assemblyId === record.assemblyId ? { ...r, status: '已作废' } : r
-      ));
-    }
-  };
-
-  const handleViewDetail = (record: AssemblyRecord) => {
-    setSelectedRecord(record);
-    setShowDetailDialog(true);
-  };
-
-  return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold mb-2">套件组装</h1>
-        <p className="text-gray-500 text-sm">管理套件组装单，将配件组装为成品</p>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-        <div className="flex gap-4 items-end">
-          <div className="flex-1">
-            <label className="block text-sm mb-1.5 text-gray-700">搜索</label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="套件名称/组装单号"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-          
-          <div className="w-64">
-            <label className="block text-sm mb-1.5 text-gray-700">组装日期</label>
-            <div className="flex gap-2 items-center">
-              <input
-                type="date"
-                value={dateRange[0]}
-                onChange={(e) => setDateRange([e.target.value, dateRange[1]])}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-              />
-              <span className="text-gray-400">-</span>
-              <input
-                type="date"
-                value={dateRange[1]}
-                onChange={(e) => setDateRange([dateRange[0], e.target.value])}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-
-          <div className="w-40">
-            <label className="block text-sm mb-1.5 text-gray-700">状态</label>
-            <FauxSelect
-              value={statusFilter}
-              onChange={setStatusFilter}
-              options={['全部', '已组装', '已作废']}
-            />
-          </div>
-
-          <button
-            onClick={() => setShowAddDialog(true)}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            新增组装
-          </button>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">组装单号</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">套件名称</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">组装数量</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">组装日期</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">成本合计</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">操作人</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">状态</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">操作</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {paginatedRecords.map((record) => (
-                <tr key={record.assemblyId} className="hover:bg-blue-50/40 transition-colors">
-                  <td className="px-4 py-3 text-sm text-gray-900">{record.assemblyId}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{record.kitName}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{record.quantity}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{record.assemblyDate}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">¥{record.totalCost.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{record.operator}</td>
-                  <td className="px-4 py-3 text-sm">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                      record.status === '已组装' 
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-red-100 text-red-700'
-                    }`}>
-                      {record.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleViewDetail(record)}
-                        className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
-                      >
-                        <Eye className="w-4 h-4" />
-                        查看
-                      </button>
-                      {record.status === '已组装' && (
-                        <button
-                          onClick={() => handleVoid(record)}
-                          className="text-red-600 hover:text-red-700 flex items-center gap-1"
-                        >
-                          <Ban className="w-4 h-4" />
-                          作废
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="px-4 py-3 border-t border-gray-200 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              共 {filteredRecords.length} 条记录
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border border-gray-200 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                上一页
-              </button>
-              <span className="px-3 py-1 text-sm">
-                {currentPage} / {totalPages}
-              </span>
-              <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 border border-gray-200 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                下一页
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Add Assembly Dialog */}
-      {showAddDialog && (
-        <AddAssemblyDialog
-          onClose={() => setShowAddDialog(false)}
-          onSave={(newRecord) => {
-            setRecords([newRecord, ...records]);
-            setShowAddDialog(false);
-          }}
-        />
-      )}
-
-      {/* Detail Dialog */}
-      {showDetailDialog && selectedRecord && (
-        <DetailDialog
-          record={selectedRecord}
-          onClose={() => {
-            setShowDetailDialog(false);
-            setSelectedRecord(null);
-          }}
-        />
-      )}
-    </div>
-  );
-};
-
-// Add Assembly Dialog Component
-const AddAssemblyDialog: React.FC<{
-  onClose: () => void;
-  onSave: (record: AssemblyRecord) => void;
-}> = ({ onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    kitName: '',
-    templateId: '',
-    quantity: 1,
-    remark: '',
-  });
-  const [selectedParts, setSelectedParts] = useState<KitPart[]>([]);
-  const [showPartsDialog, setShowPartsDialog] = useState(false);
-
-  const handleTemplateSelect = (templateId: string) => {
-    const template = mockTemplates.find(t => t.templateId === templateId);
-    if (template) {
-      setFormData({ ...formData, templateId, kitName: template.name });
-      setSelectedParts(template.parts.map(p => ({ ...p })));
-    }
-  };
-
-  const handleSubmit = () => {
-    if (!formData.kitName || selectedParts.length === 0) {
-      alert('请填写套件名称并选择配件');
-      return;
-    }
-
-    // Check stock
-    const insufficientParts = selectedParts.filter(p => p.quantity * formData.quantity > p.stock);
-    if (insufficientParts.length > 0) {
-      alert(`以下配件库存不足：\n${insufficientParts.map(p => `${p.partName}（需要${p.quantity * formData.quantity}，库存${p.stock}）`).join('\n')}`);
-      return;
-    }
-
-    const totalCost = selectedParts.reduce((sum, p) => sum + p.subtotal, 0) * formData.quantity;
-    const newRecord: AssemblyRecord = {
-      assemblyId: `ASM${new Date().toISOString().slice(0,10).replace(/-/g, '')}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-      kitName: formData.kitName,
-      quantity: formData.quantity,
-      assemblyDate: new Date().toISOString().slice(0, 10),
-      totalCost,
-      operator: '当前用户',
-      status: '已组装',
-      remark: formData.remark,
-      parts: selectedParts.map(p => ({
-        ...p,
-        quantity: p.quantity * formData.quantity,
-        subtotal: p.subtotal * formData.quantity
-      }))
-    };
-
-    onSave(newRecord);
-  };
-
+// ─── Void Confirm ──────────────────────────────────────────────────────────────
+function VoidConfirm({ id, onClose, onConfirm }: { id: string; onClose: () => void; onConfirm: () => void }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] flex flex-col">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-[#F9FAFB] rounded-t-xl">
-          <h2 className="text-lg font-semibold">新增组装</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="w-5 h-5" />
-          </button>
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm">
+        <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+          <h3 className="font-semibold text-gray-800">提示</h3>
+          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"><CloseIcon sx={{ fontSize: 18 }} /></button>
         </div>
-
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <label className="w-24 shrink-0 text-sm text-gray-700">从模版选择</label>
-              <FauxSelect
-                value={formData.templateId}
-                onChange={handleTemplateSelect}
-                options={['', ...mockTemplates.map(t => t.templateId)]}
-                displayFn={(val) => val === '' ? '选择模版...' : mockTemplates.find(t => t.templateId === val)?.name || val}
-                className="flex-1"
-              />
-            </div>
-
-            <div className="flex items-center gap-3">
-              <label className="w-24 shrink-0 text-sm text-gray-700">套件名称</label>
-              <input
-                type="text"
-                value={formData.kitName}
-                onChange={(e) => setFormData({ ...formData, kitName: e.target.value })}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                placeholder="输入套件名称"
-              />
-            </div>
-
-            <div className="flex items-center gap-3">
-              <label className="w-24 shrink-0 text-sm text-gray-700">组装数量</label>
-              <input
-                type="number"
-                min="1"
-                value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 1 })}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            <div className="flex items-start gap-3">
-              <label className="w-24 shrink-0 text-sm text-gray-700 pt-2">配件列表</label>
-              <div className="flex-1">
-                <button
-                  onClick={() => setShowPartsDialog(true)}
-                  className="mb-3 px-4 py-2 border border-blue-500 text-blue-600 rounded-lg text-sm hover:bg-blue-50 flex items-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  添加配件
-                </button>
-                
-                {selectedParts.length > 0 && (
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    <table className="w-full text-sm">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">配件名称</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">规格</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">单位用量</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">单价</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">小计</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">操作</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100">
-                        {selectedParts.map((part) => (
-                          <tr key={part.partId}>
-                            <td className="px-3 py-2">{part.partName}</td>
-                            <td className="px-3 py-2 text-gray-600">{part.spec}</td>
-                            <td className="px-3 py-2">{part.quantity}</td>
-                            <td className="px-3 py-2">¥{part.unitCost.toFixed(2)}</td>
-                            <td className="px-3 py-2">¥{part.subtotal.toFixed(2)}</td>
-                            <td className="px-3 py-2">
-                              <button
-                                onClick={() => setSelectedParts(selectedParts.filter(p => p.partId !== part.partId))}
-                                className="text-red-600 hover:text-red-700 text-xs"
-                              >
-                                移除
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <div className="px-3 py-2 bg-gray-50 border-t border-gray-200 text-sm font-medium flex justify-between">
-                      <span>单套成本合计</span>
-                      <span>¥{selectedParts.reduce((sum, p) => sum + p.subtotal, 0).toFixed(2)}</span>
-                    </div>
-                    <div className="px-3 py-2 bg-blue-50 border-t border-gray-200 text-sm font-semibold flex justify-between">
-                      <span>总成本（× {formData.quantity}）</span>
-                      <span className="text-blue-700">¥{(selectedParts.reduce((sum, p) => sum + p.subtotal, 0) * formData.quantity).toFixed(2)}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <label className="w-24 shrink-0 text-sm text-gray-700 pt-2">备注</label>
-              <textarea
-                value={formData.remark}
-                onChange={(e) => setFormData({ ...formData, remark: e.target.value })}
-                rows={3}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 resize-none"
-                placeholder="选填"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
-          >
-            取消
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg text-sm font-medium"
-          >
-            确定
-          </button>
+        <div className="px-5 py-6 text-sm text-gray-700">确定要作废组装单 <span className="font-medium">{id}</span> 吗？</div>
+        <div className="flex justify-end gap-2 px-5 py-4 border-t border-gray-200">
+          <button onClick={onClose} className="px-4 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
+          <button onClick={onConfirm} className="px-4 py-1.5 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600">确定</button>
         </div>
       </div>
-
-      {/* Parts Selection Dialog */}
-      {showPartsDialog && (
-        <PartsSelectionDialog
-          selectedParts={selectedParts}
-          onClose={() => setShowPartsDialog(false)}
-          onConfirm={(parts) => {
-            setSelectedParts(parts);
-            setShowPartsDialog(false);
-          }}
-        />
-      )}
     </div>
   );
-};
+}
 
-// Parts Selection Dialog
-const PartsSelectionDialog: React.FC<{
+// ─── Parts Selection Dialog ────────────────────────────────────────────────────
+function PartsSelectionDialog({ selectedParts, onClose, onConfirm }: {
   selectedParts: KitPart[];
   onClose: () => void;
   onConfirm: (parts: KitPart[]) => void;
-}> = ({ selectedParts, onClose, onConfirm }) => {
+}) {
   const [parts, setParts] = useState<KitPart[]>(
     mockAvailableParts.map(p => {
       const existing = selectedParts.find(sp => sp.partId === p.partId);
       return existing ? { ...existing } : { ...p };
     })
   );
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
-  const filteredParts = parts.filter(p => 
-    p.partName.includes(searchText) || p.partCode.includes(searchText)
-  );
+  const filtered = parts.filter(p => p.partName.includes(searchText) || p.partCode.includes(searchText));
 
-  const handleQuantityChange = (partId: string, quantity: number) => {
+  const handleQtyChange = (partId: string, qty: number) => {
     setParts(parts.map(p => {
-      if (p.partId === partId) {
-        const newQty = Math.max(0, quantity);
-        return {
-          ...p,
-          quantity: newQty,
-          subtotal: newQty * p.unitCost
-        };
-      }
-      return p;
+      if (p.partId !== partId) return p;
+      const q = Math.max(0, qty);
+      return { ...p, quantity: q, subtotal: q * p.unitCost };
     }));
-  };
-
-  const handleConfirm = () => {
-    const selected = parts.filter(p => p.quantity > 0);
-    onConfirm(selected);
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
-      <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-[#F9FAFB] rounded-t-xl">
-          <h2 className="text-lg font-semibold">选择配件</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="w-5 h-5" />
-          </button>
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 shrink-0">
+          <h3 className="font-semibold text-gray-800">选择配件</h3>
+          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"><CloseIcon sx={{ fontSize: 18 }} /></button>
         </div>
-
-        <div className="p-4 border-b border-gray-200">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="搜索配件名称或编码"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-            />
-          </div>
+        <div className="px-4 py-3 border-b border-gray-200 shrink-0">
+          <input value={searchText} onChange={e => setSearchText(e.target.value)} placeholder="搜索配件名称或编码" className="w-72 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
         </div>
-
-        <div className="flex-1 overflow-y-auto p-4">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 sticky top-0">
-              <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">配件编码</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">配件名称</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">规格</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">库存</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">单价</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">使用数量</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">小计</th>
+        <div className="flex-1 overflow-auto min-h-0">
+          <table className="w-full">
+            <thead className="bg-gray-50 sticky top-0 z-10">
+              <tr className="border-b border-gray-200">
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">配件编码</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">配件名称</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">规格</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">库存</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">单价</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">使用数量</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">小计</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
-              {filteredParts.map((part) => (
-                <tr key={part.partId} className="hover:bg-blue-50/40">
-                  <td className="px-3 py-2 text-gray-600">{part.partCode}</td>
-                  <td className="px-3 py-2">{part.partName}</td>
-                  <td className="px-3 py-2 text-gray-600">{part.spec}</td>
-                  <td className="px-3 py-2 text-gray-600">{part.stock}</td>
-                  <td className="px-3 py-2">¥{part.unitCost.toFixed(2)}</td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="number"
-                      min="0"
-                      max={part.stock}
-                      value={part.quantity}
-                      onChange={(e) => handleQuantityChange(part.partId, parseInt(e.target.value) || 0)}
-                      className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-500"
-                    />
+            <tbody>
+              {filtered.map(part => (
+                <tr key={part.partId} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
+                  <td className="px-4 py-2.5 text-sm text-gray-600 font-mono">{part.partCode}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-800">{part.partName}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-600">{part.spec}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-600 text-right">{part.stock}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-700 text-right">¥{part.unitCost.toFixed(2)}</td>
+                  <td className="px-4 py-2.5">
+                    <input type="number" min="0" max={part.stock} value={part.quantity} onChange={e => handleQtyChange(part.partId, parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 text-center" />
                   </td>
-                  <td className="px-3 py-2 font-medium">¥{part.subtotal.toFixed(2)}</td>
+                  <td className="px-4 py-2.5 text-sm font-medium text-gray-800 text-right">¥{part.subtotal.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
-          <div className="text-sm">
-            已选 <span className="font-semibold text-blue-600">{parts.filter(p => p.quantity > 0).length}</span> 种配件
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
-            >
-              取消
-            </button>
-            <button
-              onClick={handleConfirm}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg text-sm font-medium"
-            >
-              确定
-            </button>
+        <div className="flex items-center justify-between px-5 py-4 border-t border-gray-200 shrink-0">
+          <div className="text-sm text-gray-600">已选 <span className="font-semibold text-blue-600">{parts.filter(p => p.quantity > 0).length}</span> 种配件</div>
+          <div className="flex gap-2">
+            <button onClick={onClose} className="px-4 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
+            <button onClick={() => onConfirm(parts.filter(p => p.quantity > 0))} className="px-4 py-1.5 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-sm">确定</button>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
-// Detail Dialog
-const DetailDialog: React.FC<{
-  record: AssemblyRecord;
-  onClose: () => void;
-}> = ({ record, onClose }) => {
+// ─── Add Assembly Dialog ────────────────────────────────────────────────────
+function AddAssemblyDialog({ onClose, onSave }: { onClose: () => void; onSave: (r: AssemblyRecord) => void }) {
+  const [templateId, setTemplateId] = useState("");
+  const [kitName, setKitName] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [remark, setRemark] = useState("");
+  const [selectedParts, setSelectedParts] = useState<KitPart[]>([]);
+  const [showParts, setShowParts] = useState(false);
+
+  const handleTemplateSelect = (tid: string) => {
+    setTemplateId(tid);
+    const tpl = mockTemplates.find(t => t.templateId === tid);
+    if (tpl) { setKitName(tpl.name); setSelectedParts(tpl.parts.map(p => ({ ...p }))); }
+  };
+
+  const handleSubmit = () => {
+    if (!kitName || selectedParts.length === 0) { alert("请填写套件名称并选择配件"); return; }
+    const insufficient = selectedParts.filter(p => p.quantity * quantity > p.stock);
+    if (insufficient.length > 0) { alert(`以下配件库存不足：${insufficient.map(p => p.partName).join("、")}`); return; }
+    const totalCost = selectedParts.reduce((s, p) => s + p.subtotal, 0) * quantity;
+    const newRec: AssemblyRecord = {
+      assemblyId: `ASM${new Date().toISOString().slice(0, 10).replace(/-/g, "")}${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`,
+      kitName, quantity, assemblyDate: new Date().toISOString().slice(0, 10),
+      totalCost, operator: "黄伟霆", status: "已组装", remark,
+      parts: selectedParts.map(p => ({ ...p, quantity: p.quantity * quantity, subtotal: p.subtotal * quantity })),
+    };
+    onSave(newRec);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-[#F9FAFB] rounded-t-xl">
-          <h2 className="text-lg font-semibold">组装单详情</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="w-5 h-5" />
-          </button>
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 shrink-0">
+          <h3 className="font-semibold text-gray-800">新增组装</h3>
+          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"><CloseIcon sx={{ fontSize: 18 }} /></button>
         </div>
-
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-4 mb-6">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">组装单号：</span>
-                <span className="font-medium">{record.assemblyId}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">套件名称：</span>
-                <span className="font-medium">{record.kitName}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">组装数量：</span>
-                <span className="font-medium">{record.quantity}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">组装日期：</span>
-                <span>{record.assemblyDate}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">成本合计：</span>
-                <span className="font-medium text-blue-600">¥{record.totalCost.toFixed(2)}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">操作人：</span>
-                <span>{record.operator}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-gray-600 w-24 shrink-0">状态：</span>
-                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                  record.status === '已组装' 
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                }`}>
-                  {record.status}
-                </span>
-              </div>
-              {record.remark && (
-                <div className="flex gap-3 col-span-2">
-                  <span className="text-gray-600 w-24 shrink-0">备注：</span>
-                  <span>{record.remark}</span>
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-gray-700 w-24 shrink-0">从模版选择</label>
+            <FauxSelect className="flex-1" value={templateId} onChange={e => handleTemplateSelect(e.target.value)} placeholder="选择模版...">
+              {mockTemplates.map(t => <option key={t.templateId} value={t.templateId}>{t.name}</option>)}
+            </FauxSelect>
+          </div>
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-gray-700 w-24 shrink-0"><span className="text-red-500">*</span> 套件名称</label>
+            <input value={kitName} onChange={e => setKitName(e.target.value)} placeholder="输入套件名称" className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+          </div>
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-gray-700 w-24 shrink-0">组装数量</label>
+            <input type="number" min="1" value={quantity} onChange={e => setQuantity(parseInt(e.target.value) || 1)} className="w-32 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+          </div>
+          <div className="flex items-start gap-3">
+            <label className="text-sm text-gray-700 w-24 shrink-0 pt-1.5">配件列表</label>
+            <div className="flex-1">
+              <button onClick={() => setShowParts(true)} className="mb-3 px-3 py-1.5 border border-blue-500 text-blue-600 rounded-lg text-sm hover:bg-blue-50 flex items-center gap-1.5">
+                <AddIcon sx={{ fontSize: 16 }} />添加配件
+              </button>
+              {selectedParts.length > 0 && (
+                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50">
+                      <tr className="border-b border-gray-200">
+                        <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700">配件名称</th>
+                        <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700">规格</th>
+                        <th className="px-3 py-2 text-right text-xs font-semibold text-gray-700">单位用量</th>
+                        <th className="px-3 py-2 text-right text-xs font-semibold text-gray-700">单价</th>
+                        <th className="px-3 py-2 text-right text-xs font-semibold text-gray-700">小计</th>
+                        <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedParts.map(part => (
+                        <tr key={part.partId} className="border-b border-gray-100">
+                          <td className="px-3 py-2 text-gray-800">{part.partName}</td>
+                          <td className="px-3 py-2 text-gray-600">{part.spec}</td>
+                          <td className="px-3 py-2 text-right">{part.quantity}</td>
+                          <td className="px-3 py-2 text-right">¥{part.unitCost.toFixed(2)}</td>
+                          <td className="px-3 py-2 text-right">¥{part.subtotal.toFixed(2)}</td>
+                          <td className="px-3 py-2 text-center">
+                            <button onClick={() => setSelectedParts(selectedParts.filter(p => p.partId !== part.partId))} className="text-xs text-red-500 hover:text-red-700">移除</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="px-3 py-2 bg-gray-50 border-t border-gray-200 text-sm font-medium flex justify-between">
+                    <span>单套成本合计</span><span>¥{selectedParts.reduce((s, p) => s + p.subtotal, 0).toFixed(2)}</span>
+                  </div>
+                  <div className="px-3 py-2 bg-blue-50 border-t border-gray-200 text-sm font-semibold flex justify-between">
+                    <span>总成本（×{quantity}）</span>
+                    <span className="text-blue-700">¥{(selectedParts.reduce((s, p) => s + p.subtotal, 0) * quantity).toFixed(2)}</span>
+                  </div>
                 </div>
               )}
             </div>
           </div>
-
-          <div>
-            <h3 className="text-sm font-semibold mb-3">配件明细</h3>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">配件编码</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">配件名称</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">规格</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">使用数量</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">单价</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">小计</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {record.parts.map((part) => (
-                    <tr key={part.partId}>
-                      <td className="px-3 py-2 text-gray-600">{part.partCode}</td>
-                      <td className="px-3 py-2">{part.partName}</td>
-                      <td className="px-3 py-2 text-gray-600">{part.spec}</td>
-                      <td className="px-3 py-2">{part.quantity}</td>
-                      <td className="px-3 py-2">¥{part.unitCost.toFixed(2)}</td>
-                      <td className="px-3 py-2 font-medium">¥{part.subtotal.toFixed(2)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot className="bg-gray-50 border-t border-gray-200">
-                  <tr>
-                    <td colSpan={5} className="px-3 py-2 text-right font-semibold">合计</td>
-                    <td className="px-3 py-2 font-semibold text-blue-600">¥{record.totalCost.toFixed(2)}</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+          <div className="flex items-start gap-3">
+            <label className="text-sm text-gray-700 w-24 shrink-0 pt-1.5">备注</label>
+            <textarea value={remark} onChange={e => setRemark(e.target.value)} rows={3} placeholder="选填" className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 resize-none" />
           </div>
         </div>
+        <div className="flex justify-end gap-2 px-5 py-4 border-t border-gray-200 shrink-0">
+          <button onClick={onClose} className="px-4 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
+          <button onClick={handleSubmit} className="px-4 py-1.5 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-sm">确定</button>
+        </div>
+      </div>
+      {showParts && (
+        <PartsSelectionDialog
+          selectedParts={selectedParts}
+          onClose={() => setShowParts(false)}
+          onConfirm={parts => { setSelectedParts(parts); setShowParts(false); }}
+        />
+      )}
+    </div>
+  );
+}
 
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
-          >
-            关闭
-          </button>
+// ─── Detail Dialog ────────────────────────────────────────────────────────────
+function DetailDialog({ record, onClose }: { record: AssemblyRecord; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 shrink-0">
+          <h3 className="font-semibold text-gray-800">组装单详情</h3>
+          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"><CloseIcon sx={{ fontSize: 18 }} /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            {[["组装单号", record.assemblyId], ["套件名称", record.kitName], ["组装数量", String(record.quantity)], ["组装日期", record.assemblyDate], ["操作人", record.operator]].map(([l, v]) => (
+              <div key={l} className="flex gap-3">
+                <span className="text-gray-500 w-20 shrink-0">{l}：</span>
+                <span className="font-medium text-gray-800">{v}</span>
+              </div>
+            ))}
+            <div className="flex gap-3">
+              <span className="text-gray-500 w-20 shrink-0">成本合计：</span>
+              <span className="font-semibold text-blue-600">¥{record.totalCost.toFixed(2)}</span>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-gray-500 w-20 shrink-0">状态：</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${record.status === "已组装" ? "bg-blue-100 text-blue-700 border border-blue-200" : "bg-red-100 text-red-700 border border-red-200"}`}>{record.status}</span>
+            </div>
+            {record.remark && (
+              <div className="col-span-2 flex gap-3">
+                <span className="text-gray-500 w-20 shrink-0">备注：</span>
+                <span className="text-gray-700">{record.remark}</span>
+              </div>
+            )}
+          </div>
+          <div className="border-t border-gray-200 pt-4">
+            <h4 className="text-sm font-semibold text-gray-700 mb-3">配件明细</h4>
+            <table className="w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
+              <thead className="bg-gray-50">
+                <tr className="border-b border-gray-200">
+                  <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-700">配件编码</th>
+                  <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-700">配件名称</th>
+                  <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-700">规格</th>
+                  <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-700">使用数量</th>
+                  <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-700">单价</th>
+                  <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-700">小计</th>
+                </tr>
+              </thead>
+              <tbody>
+                {record.parts.map(part => (
+                  <tr key={part.partId} className="border-b border-gray-100">
+                    <td className="px-3 py-2 text-gray-600 font-mono">{part.partCode}</td>
+                    <td className="px-3 py-2 text-gray-800">{part.partName}</td>
+                    <td className="px-3 py-2 text-gray-600">{part.spec}</td>
+                    <td className="px-3 py-2 text-right">{part.quantity}</td>
+                    <td className="px-3 py-2 text-right">¥{part.unitCost.toFixed(2)}</td>
+                    <td className="px-3 py-2 text-right font-medium">¥{part.subtotal.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className="bg-gray-50 border-t border-gray-200">
+                <tr>
+                  <td colSpan={5} className="px-3 py-2 text-right font-semibold text-gray-700">合计</td>
+                  <td className="px-3 py-2 text-right font-semibold text-blue-600">¥{record.totalCost.toFixed(2)}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div className="flex justify-end px-5 py-4 border-t border-gray-200 shrink-0">
+          <button onClick={onClose} className="px-4 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">关闭</button>
         </div>
       </div>
     </div>
   );
+}
+
+// ─── Main ──────────────────────────────────────────────────────────────────────
+const KitAssembly: React.FC = () => {
+  const [records, setRecords] = useState<AssemblyRecord[]>(mockRecords);
+  const [searchText, setSearchText] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [detailRecord, setDetailRecord] = useState<AssemblyRecord | null>(null);
+  const [voidRecord, setVoidRecord] = useState<AssemblyRecord | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+
+  const filtered = records.filter(r =>
+    (!searchText || r.kitName.includes(searchText) || r.assemblyId.includes(searchText)) &&
+    (!statusFilter || r.status === statusFilter) &&
+    (!startDate || r.assemblyDate >= startDate) &&
+    (!endDate || r.assemblyDate <= endDate)
+  );
+  const totalPages = Math.ceil(filtered.length / pageSize);
+  const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const handleReset = () => { setSearchText(""); setStartDate(""); setEndDate(""); setStatusFilter(""); setCurrentPage(1); };
+
+  const handleVoidConfirm = () => {
+    if (voidRecord) {
+      setRecords(records.map(r => r.assemblyId === voidRecord.assemblyId ? { ...r, status: "已作废" } : r));
+      setVoidRecord(null);
+    }
+  };
+
+  return (
+    <div className="h-full flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white shrink-0">
+        <h2 className="text-lg font-bold text-gray-800">套件组装</h2>
+      </div>
+
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 shrink-0">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 whitespace-nowrap shrink-0">套件名称/单号：</span>
+            <input value={searchText} onChange={e => { setSearchText(e.target.value); setCurrentPage(1); }} placeholder="请输入" className="w-40 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 whitespace-nowrap shrink-0">组装日期：</span>
+            <input type="date" value={startDate} onChange={e => { setStartDate(e.target.value); setCurrentPage(1); }} className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+            <span className="text-gray-400 text-sm">-</span>
+            <input type="date" value={endDate} onChange={e => { setEndDate(e.target.value); setCurrentPage(1); }} className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 whitespace-nowrap shrink-0">状态：</span>
+            <FauxSelect className="w-28" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} placeholder="全部">
+              <option value="">全部</option>
+              <option value="已组装">已组装</option>
+              <option value="已作废">已作废</option>
+            </FauxSelect>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setCurrentPage(1)} className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5">
+              <SearchIcon sx={{ fontSize: 16 }} />搜索
+            </button>
+            <button onClick={handleReset} className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5">
+              <RefreshIcon sx={{ fontSize: 16 }} />重置
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <button onClick={() => setShowAddDialog(true)} className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center gap-1.5">
+          <AddIcon sx={{ fontSize: 16 }} />新增组装
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-auto min-h-0">
+        <table className="w-full">
+          <thead className="bg-gray-50 sticky top-0 z-10">
+            <tr className="border-b border-gray-200">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap w-12">序号</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">组装单号</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">套件名称</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">组装数量</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">组装日期</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 whitespace-nowrap">成本合计</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">操作人</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">状态</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paged.map((record, idx) => (
+              <tr key={record.assemblyId} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
+                <td className="px-4 py-2.5 text-sm text-gray-500">{(currentPage - 1) * pageSize + idx + 1}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-600 font-mono">{record.assemblyId}</td>
+                <td className="px-4 py-2.5 text-sm font-medium text-gray-800">{record.kitName}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-700 text-right">{record.quantity}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-600">{record.assemblyDate}</td>
+                <td className="px-4 py-2.5 text-sm font-medium text-gray-800 text-right">¥{record.totalCost.toFixed(2)}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-600">{record.operator}</td>
+                <td className="px-4 py-2.5">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${record.status === "已组装" ? "bg-blue-100 text-blue-700 border border-blue-200" : "bg-red-100 text-red-700 border border-red-200"}`}>{record.status}</span>
+                </td>
+                <td className="px-4 py-2.5">
+                  <div className="flex items-center gap-2 whitespace-nowrap">
+                    <button onClick={() => setDetailRecord(record)} className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800">
+                      <ViewIcon sx={{ fontSize: 13 }} />查看
+                    </button>
+                    {record.status === "已组装" && (
+                      <button onClick={() => setVoidRecord(record)} className="flex items-center gap-1 text-xs text-red-500 hover:text-red-700">
+                        <VoidIcon sx={{ fontSize: 13 }} />作废
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {filtered.length === 0 && <div className="py-16 text-center text-sm text-gray-400">暂无数据</div>}
+      </div>
+
+      <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-600">共 <span className="font-semibold text-gray-800">{filtered.length}</span> 条</div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1} className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">上一页</button>
+            <button className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg">{currentPage}</button>
+            <button onClick={() => setCurrentPage(Math.min(totalPages || 1, currentPage + 1))} disabled={currentPage >= (totalPages || 1)} className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">下一页</button>
+          </div>
+        </div>
+      </div>
+
+      {showAddDialog && <AddAssemblyDialog onClose={() => setShowAddDialog(false)} onSave={r => { setRecords([r, ...records]); setShowAddDialog(false); }} />}
+      {detailRecord && <DetailDialog record={detailRecord} onClose={() => setDetailRecord(null)} />}
+      {voidRecord && <VoidConfirm id={voidRecord.assemblyId} onClose={() => setVoidRecord(null)} onConfirm={handleVoidConfirm} />}
+    </div>
+  );
 };
 
+import React from "react";
 export default KitAssembly;

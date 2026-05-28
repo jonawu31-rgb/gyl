@@ -375,7 +375,7 @@ export function RecentPurchaseCustomers() {
 
       {/* Tabs */}
       <div className="border-b border-gray-200 bg-gray-50 px-4 shrink-0">
-        <div className="flex items-center gap-2 py-2">
+        <div className="flex gap-1">
           {(
             [
               { key: "ratio", label: "新客成交比" },
@@ -385,13 +385,14 @@ export function RecentPurchaseCustomers() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${
+              className={`px-5 py-3 text-sm font-medium transition-all relative ${
                 activeTab === tab.key
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm"
+                  ? "text-blue-600 bg-white"
                   : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
               }`}
             >
               {tab.label}
+              {activeTab === tab.key && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />}
             </button>
           ))}
         </div>

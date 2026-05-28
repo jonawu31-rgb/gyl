@@ -413,63 +413,20 @@ export function PrintTemplateManagement() {
         </h2>
       </div>
 
-      {/* Toolbar */}
-      <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 shrink-0">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              setEditTarget(null);
-              setAddOpen(true);
-            }}
-            className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <AddIcon sx={{ fontSize: 16 }} />
-            新增
-          </button>
-          <button
-            onClick={() => {
-              setTextTarget(templates[0] ?? null);
-              setTextSettingOpen(true);
-            }}
-            className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <TextFieldsIcon sx={{ fontSize: 16 }} />
-            打印文案设计
-          </button>
-          <div className="w-px h-6 bg-gray-300" />
-          <button
-            onClick={() => {
-              setKeyword("");
-              setFilterDocType("");
-            }}
-            className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <RefreshIcon sx={{ fontSize: 16 }} />
-            重置
-          </button>
-        </div>
-      </div>
-
       {/* Search */}
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 shrink-0">
-        <div className="grid grid-cols-4 gap-x-3 gap-y-2.5 mb-2.5">
+        <div className="grid grid-cols-4 gap-x-3 gap-y-2.5">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">
               模版名称
             </span>
-            <div className="relative flex-1 min-w-0">
-              <SearchIcon
-                sx={{ fontSize: 16 }}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="text"
-                placeholder="搜索模版名称..."
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder:text-gray-400"
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="搜索模版名称..."
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="flex-1 min-w-0 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder:text-gray-400"
+            />
           </div>
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">
@@ -521,10 +478,33 @@ export function PrintTemplateManagement() {
               <RefreshIcon sx={{ fontSize: 16 }} />
               重置
             </button>
-            <span className="text-xs text-gray-400">
-              共 {filtered.length} 条
-            </span>
           </div>
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              setEditTarget(null);
+              setAddOpen(true);
+            }}
+            className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <AddIcon sx={{ fontSize: 16 }} />
+            新增
+          </button>
+          <button
+            onClick={() => {
+              setTextTarget(templates[0] ?? null);
+              setTextSettingOpen(true);
+            }}
+            className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <TextFieldsIcon sx={{ fontSize: 16 }} />
+            打印文案设计
+          </button>
         </div>
       </div>
 

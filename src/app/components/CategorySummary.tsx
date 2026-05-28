@@ -79,7 +79,7 @@ function SummaryTable({ rows, title, colors }: TableProps) {
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
         <span className="text-sm font-semibold text-gray-800">{title}</span>
       </div>
-      <div className="overflow-auto">
+      <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50">
@@ -144,7 +144,7 @@ export function CategorySummary() {
   const totalProfit = categories.reduce((s, r) => s + r.profit, 0);
 
   return (
-    <div className="h-full flex flex-col gap-3 overflow-auto">
+    <div className="h-full flex flex-col gap-3 overflow-y-auto p-4">
       {/* Header card */}
       <div className="bg-white rounded-xl border border-gray-200 shrink-0">
         <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
