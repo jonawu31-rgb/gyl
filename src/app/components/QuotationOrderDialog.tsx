@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Close as CloseIcon } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface QuotationOrderDialogProps {
   open: boolean;
@@ -46,7 +47,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 客户 <span className="text-red-500">*</span>
               </label>
-              <select
+              <FauxSelect
                 value={formData.customer}
                 onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -55,7 +56,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
                 <option value="黄山佳辉汽配">黄山佳辉汽配</option>
                 <option value="济南恒通汽车">济南恒通汽车</option>
                 <option value="深圳明辉配件">深圳明辉配件</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 单据编号 */}
@@ -103,7 +104,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 收款方式
               </label>
-              <select
+              <FauxSelect
                 value={formData.paymentMethod}
                 onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -113,7 +114,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
                 <option value="转账">转账</option>
                 <option value="支付宝">支付宝</option>
                 <option value="微信">微信</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 配送方式 */}
@@ -121,7 +122,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 配送方式
               </label>
-              <select
+              <FauxSelect
                 value={formData.deliveryMethod}
                 onChange={(e) => setFormData({ ...formData, deliveryMethod: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -131,7 +132,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
                 <option value="物流">物流</option>
                 <option value="自提">自提</option>
                 <option value="送货">送货</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 业务员 */}
@@ -139,7 +140,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 业务员
               </label>
-              <select
+              <FauxSelect
                 value={formData.salesperson}
                 onChange={(e) => setFormData({ ...formData, salesperson: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -148,7 +149,7 @@ export function QuotationOrderDialog({ open, onClose, orderData }: QuotationOrde
                 <option value="管理员">管理员</option>
                 <option value="张三">张三</option>
                 <option value="李四">李四</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 车架号 */}

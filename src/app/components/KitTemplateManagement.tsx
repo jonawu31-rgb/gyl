@@ -4,6 +4,7 @@ import {
   Search as SearchIcon, Refresh as RefreshIcon,
   Inventory2 as PartsIcon, Close as CloseIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface KitPart {
   partId: string;
@@ -164,10 +165,10 @@ function TemplateDialog({ open, onClose, onSave, editData }: TemplateDialogProps
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">套件分类</label>
-              <select value={form.category} onChange={(e) => set("category", e.target.value)}
+              <FauxSelect value={form.category} onChange={(e) => set("category", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 text-sm">
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
+              </FauxSelect>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -368,17 +369,17 @@ export function KitTemplateManagement() {
             <input type="text" placeholder="搜索模版名称/编号..." value={keyword} onChange={(e) => setKeyword(e.target.value)}
               className="w-full pl-9 pr-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400 bg-gray-50 focus:bg-white" />
           </div>
-          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
+          <FauxSelect value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
             className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-gray-50 text-gray-700">
             <option value="">全部分类</option>
             {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
+          </FauxSelect>
+          <FauxSelect value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
             className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-gray-50 text-gray-700">
             <option value="">全部状态</option>
             <option value="enabled">启用</option>
             <option value="disabled">停用</option>
-          </select>
+          </FauxSelect>
           <span className="text-xs text-gray-400">共 {filtered.length} 条</span>
         </div>
       </div>

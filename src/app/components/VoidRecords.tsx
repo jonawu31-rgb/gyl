@@ -3,6 +3,7 @@ import {
   Search as SearchIcon, Refresh as RefreshIcon,
   Visibility as ViewIcon, Close as CloseIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface VoidDetail {
   productName: string;
@@ -119,11 +120,11 @@ export function VoidRecords() {
             <input type="text" placeholder="单据编号/客户名称..." value={keyword} onChange={(e) => setKeyword(e.target.value)}
               className="w-full pl-9 pr-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400 bg-gray-50 focus:bg-white" />
           </div>
-          <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
+          <FauxSelect value={filterType} onChange={(e) => setFilterType(e.target.value)}
             className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-gray-50 text-gray-700">
             <option value="">全部单据类型</option>
             {Object.entries(DOC_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-          </select>
+          </FauxSelect>
           <div className="flex items-center gap-1.5">
             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
               className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-gray-50 text-gray-700" />

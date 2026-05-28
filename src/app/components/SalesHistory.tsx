@@ -8,6 +8,7 @@ import {
   Print as PrintIcon,
   Visibility as ViewIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 import { SalesHistoryDetailDialog } from "./SalesHistoryDetailDialog";
 import { SalesHistoryEditSalespersonDialog } from "./SalesHistoryEditSalespersonDialog";
 import { SalesHistoryVoidDialog } from "./SalesHistoryVoidDialog";
@@ -340,7 +341,7 @@ export function SalesHistory() {
               />
 
               <label className="col-span-1 text-sm font-medium text-gray-700">销售员</label>
-              <select
+              <FauxSelect
                 value={searchFilters.salesperson}
                 onChange={(e) => setSearchFilters({ ...searchFilters, salesperson: e.target.value })}
                 className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -348,7 +349,7 @@ export function SalesHistory() {
                 <option value="">请选择</option>
                 <option value="李销售">李销售</option>
                 <option value="张销售">张销售</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* Second Row */}
@@ -375,7 +376,7 @@ export function SalesHistory() {
               {activeTab === "orders" && (
                 <>
                   <label className="col-span-1 text-sm font-medium text-gray-700">商城单据</label>
-                  <select
+                  <FauxSelect
                     value={searchFilters.mallOrder}
                     onChange={(e) => setSearchFilters({ ...searchFilters, mallOrder: e.target.value })}
                     className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -383,7 +384,7 @@ export function SalesHistory() {
                     <option value="">请选择</option>
                     <option value="是">是</option>
                     <option value="否">否</option>
-                  </select>
+                  </FauxSelect>
                 </>
               )}
 

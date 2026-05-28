@@ -17,10 +17,15 @@ interface Origin {
 export function OriginManagement() {
   const [searchName, setSearchName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [dialogMode, setDialogMode] = useState<"add" | "edit">("add");
-  const [currentOrigin, setCurrentOrigin] = useState<Origin | null>(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<Origin | null>(null);
+  const [dialogMode, setDialogMode] = useState<"add" | "edit">(
+    "add",
+  );
+  const [currentOrigin, setCurrentOrigin] =
+    useState<Origin | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] =
+    useState(false);
+  const [deleteTarget, setDeleteTarget] =
+    useState<Origin | null>(null);
 
   const [origins, setOrigins] = useState<Origin[]>([
     {
@@ -143,7 +148,9 @@ export function OriginManagement() {
   const filteredOrigins = useMemo(() => {
     return origins.filter((origin) => {
       const nameMatch = searchName
-        ? origin.originName.toLowerCase().includes(searchName.toLowerCase())
+        ? origin.originName
+            .toLowerCase()
+            .includes(searchName.toLowerCase())
         : true;
       return nameMatch;
     });
@@ -152,10 +159,15 @@ export function OriginManagement() {
   // 分页数据
   const paginatedOrigins = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredOrigins.slice(startIndex, startIndex + itemsPerPage);
+    return filteredOrigins.slice(
+      startIndex,
+      startIndex + itemsPerPage,
+    );
   }, [filteredOrigins, currentPage]);
 
-  const totalPages = Math.ceil(filteredOrigins.length / itemsPerPage);
+  const totalPages = Math.ceil(
+    filteredOrigins.length / itemsPerPage,
+  );
 
   // 搜索
   const handleSearch = () => {
@@ -200,7 +212,9 @@ export function OriginManagement() {
   // 确认删除
   const handleDeleteConfirm = () => {
     if (deleteTarget) {
-      setOrigins(origins.filter((u) => u.id !== deleteTarget.id));
+      setOrigins(
+        origins.filter((u) => u.id !== deleteTarget.id),
+      );
       setShowDeleteDialog(false);
       setDeleteTarget(null);
       alert("删除成功");
@@ -220,7 +234,10 @@ export function OriginManagement() {
         originName: formData.originName,
         sortValue: formData.sortValue,
         remark: formData.remark,
-        createTime: new Date().toISOString().replace("T", " ").slice(0, 19),
+        createTime: new Date()
+          .toISOString()
+          .replace("T", " ")
+          .slice(0, 19),
       };
       setOrigins([...origins, newOrigin]);
       alert("新增成功");
@@ -235,8 +252,8 @@ export function OriginManagement() {
                   sortValue: formData.sortValue,
                   remark: formData.remark,
                 }
-              : u
-          )
+              : u,
+          ),
         );
         alert("编辑成功");
       }
@@ -249,7 +266,9 @@ export function OriginManagement() {
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white shrink-0">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-800">产地管理</h2>
+          <h2 className="text-lg font-bold text-gray-800">
+            产地管理
+          </h2>
           <button
             onClick={handleAdd}
             className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
@@ -317,7 +336,10 @@ export function OriginManagement() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {paginatedOrigins.map((origin, index) => (
-              <tr key={origin.id} className="hover:bg-gray-50 transition-colors">
+              <tr
+                key={origin.id}
+                className="hover:bg-gray-50 transition-colors"
+              >
                 <td className="px-4 py-3 text-sm text-gray-700">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
@@ -357,11 +379,14 @@ export function OriginManagement() {
       <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 shrink-0">
         <div className="flex items-center justify-between text-sm">
           <div className="text-gray-600">
-            共 {filteredOrigins.length} 条数据，每页 {itemsPerPage} 条
+            共 {filteredOrigins.length} 条数据，每页{" "}
+            {itemsPerPage} 条
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              onClick={() =>
+                setCurrentPage((p) => Math.max(1, p - 1))
+              }
               disabled={currentPage === 1}
               className="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
@@ -371,7 +396,11 @@ export function OriginManagement() {
               第 {currentPage} 页，共 {totalPages} 页
             </span>
             <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() =>
+                setCurrentPage((p) =>
+                  Math.min(totalPages, p + 1),
+                )
+              }
               disabled={currentPage === totalPages}
               className="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
@@ -393,14 +422,18 @@ export function OriginManagement() {
             <div className="px-5 py-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <span className="text-red-500">*</span> 产地名称
+                  <span className="text-red-500">*</span>{" "}
+                  产地名称
                 </label>
                 <input
                   type="text"
                   placeholder="请输入产地名称"
                   value={formData.originName}
                   onChange={(e) =>
-                    setFormData({ ...formData, originName: e.target.value })
+                    setFormData({
+                      ...formData,
+                      originName: e.target.value,
+                    })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
                 />
@@ -430,7 +463,10 @@ export function OriginManagement() {
                   placeholder="请输入备注"
                   value={formData.remark}
                   onChange={(e) =>
-                    setFormData({ ...formData, remark: e.target.value })
+                    setFormData({
+                      ...formData,
+                      remark: e.target.value,
+                    })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
                 />
@@ -459,7 +495,9 @@ export function OriginManagement() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm">
             <div className="px-5 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-800">提示</h3>
+              <h3 className="text-lg font-semibold text-gray-800">
+                提示
+              </h3>
             </div>
             <div className="px-5 py-6">
               <p className="text-sm text-gray-700">

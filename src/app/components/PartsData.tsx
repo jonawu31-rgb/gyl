@@ -12,6 +12,7 @@ import {
   Warning as WarningIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 import { PartsDataDialog } from "./PartsDataDialog";
 
 interface PartItem {
@@ -364,14 +365,14 @@ function MoreQueryDialog({
             <div key={field.key} className="flex items-center gap-2">
               <label className="text-sm text-gray-700 w-24 shrink-0 whitespace-nowrap">{field.label}:</label>
               {field.type === "select" ? (
-                <select
+                <FauxSelect
                   value={(filters as any)[field.key]}
                   onChange={(e) => setFilters({ ...filters, [field.key]: e.target.value })}
                   className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                 >
                   <option value="">全部</option>
                   {field.options?.map((o) => <option key={o} value={o}>{o}</option>)}
-                </select>
+                </FauxSelect>
               ) : (
                 <input
                   type="text"

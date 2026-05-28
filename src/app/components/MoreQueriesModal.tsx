@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Close as CloseIcon } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface MoreQueriesModalProps {
   open: boolean;
@@ -66,7 +67,7 @@ export function MoreQueriesModal({ open, onClose, onQuery }: MoreQueriesModalPro
               <label className="text-sm text-gray-700 w-24 text-right shrink-0">
                 是否有库存
               </label>
-              <select
+              <FauxSelect
                 value={filters.hasStock}
                 onChange={(e) => setFilters({ ...filters, hasStock: e.target.value })}
                 className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
@@ -74,7 +75,7 @@ export function MoreQueriesModal({ open, onClose, onQuery }: MoreQueriesModalPro
                 <option value="全部">全部</option>
                 <option value="有库存">有库存</option>
                 <option value="无库存">无库存</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 特证码 */}
@@ -96,7 +97,7 @@ export function MoreQueriesModal({ open, onClose, onQuery }: MoreQueriesModalPro
               <label className="text-sm text-gray-700 w-24 text-right shrink-0">
                 供应商
               </label>
-              <select
+              <FauxSelect
                 value={filters.supplier}
                 onChange={(e) => setFilters({ ...filters, supplier: e.target.value })}
                 className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-gray-400"
@@ -105,7 +106,7 @@ export function MoreQueriesModal({ open, onClose, onQuery }: MoreQueriesModalPro
                 <option value="博世">博世</option>
                 <option value="曼牌">曼牌</option>
                 <option value="马勒">马勒</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 图号 */}
@@ -141,7 +142,7 @@ export function MoreQueriesModal({ open, onClose, onQuery }: MoreQueriesModalPro
               <label className="text-sm text-gray-700 w-24 text-right shrink-0">
                 产地
               </label>
-              <select
+              <FauxSelect
                 value={filters.origin}
                 onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
                 className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-gray-400"
@@ -151,7 +152,7 @@ export function MoreQueriesModal({ open, onClose, onQuery }: MoreQueriesModalPro
                 <option value="日本">日本</option>
                 <option value="中国">中国</option>
                 <option value="美国">美国</option>
-              </select>
+              </FauxSelect>
             </div>
           </div>
         </div>

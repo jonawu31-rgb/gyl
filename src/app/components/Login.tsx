@@ -1,5 +1,5 @@
 import { useState } from "react";
-import imgLoginBg from "../../imports/ImageWithFallback/login-bg.png";
+import imgLoginBg from "figma:asset/2ab02ad19ae9ff8fe85aa0d60b68394c8366bad4.png";
 import { Logo } from "./Logo";
 import {
   Person as PersonIcon,

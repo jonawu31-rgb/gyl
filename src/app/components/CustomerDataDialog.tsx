@@ -4,6 +4,7 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface PriceCategoryItem {
   id: string;
@@ -237,7 +238,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
               </div>
               <div>
                 <label className={labelCls}>性别</label>
-                <select
+                <FauxSelect
                   value={form.gender}
                   onChange={(e) => set("gender", e.target.value)}
                   className={selectCls}
@@ -245,7 +246,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="">请选择</option>
                   <option value="男">男</option>
                   <option value="女">女</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>出生日期</label>
@@ -266,7 +267,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
               <div>
                 <label className={labelCls}>收货地址</label>
                 <div className="flex gap-2">
-                  <select
+                  <FauxSelect
                     value={form.shippingProvince}
                     onChange={(e) => set("shippingProvince", e.target.value)}
                     className="w-36 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm text-gray-700"
@@ -277,8 +278,8 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                     <option value="江苏省">江苏省</option>
                     <option value="北京市">北京市</option>
                     <option value="上海市">上海市</option>
-                  </select>
-                  <select
+                  </FauxSelect>
+                  <FauxSelect
                     value={form.shippingCity}
                     onChange={(e) => set("shippingCity", e.target.value)}
                     className="w-36 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm text-gray-700"
@@ -288,8 +289,8 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                     <option value="深圳市">深圳市</option>
                     <option value="杭州市">杭州市</option>
                     <option value="南京市">南京市</option>
-                  </select>
-                  <select
+                  </FauxSelect>
+                  <FauxSelect
                     value={form.shippingDistrict}
                     onChange={(e) => set("shippingDistrict", e.target.value)}
                     className="w-36 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm text-gray-700"
@@ -298,7 +299,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                     <option value="天河区">天河区</option>
                     <option value="越秀区">越秀区</option>
                     <option value="福田区">福田区</option>
-                  </select>
+                  </FauxSelect>
                   <input
                     type="text"
                     placeholder="请输入详细地址"
@@ -311,7 +312,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
               <div>
                 <label className={labelCls}>注册地址</label>
                 <div className="flex gap-2">
-                  <select
+                  <FauxSelect
                     value={form.registeredProvince}
                     onChange={(e) => set("registeredProvince", e.target.value)}
                     className="w-36 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm text-gray-700"
@@ -322,8 +323,8 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                     <option value="江苏省">江苏省</option>
                     <option value="北京市">北京市</option>
                     <option value="上海市">上海市</option>
-                  </select>
-                  <select
+                  </FauxSelect>
+                  <FauxSelect
                     value={form.registeredCity}
                     onChange={(e) => set("registeredCity", e.target.value)}
                     className="w-36 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm text-gray-700"
@@ -333,8 +334,8 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                     <option value="深圳市">深圳市</option>
                     <option value="杭州市">杭州市</option>
                     <option value="南京市">南京市</option>
-                  </select>
-                  <select
+                  </FauxSelect>
+                  <FauxSelect
                     value={form.registeredDistrict}
                     onChange={(e) => set("registeredDistrict", e.target.value)}
                     className="w-36 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm text-gray-700"
@@ -343,7 +344,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                     <option value="天河区">天河区</option>
                     <option value="越秀区">越秀区</option>
                     <option value="福田区">福田区</option>
-                  </select>
+                  </FauxSelect>
                   <input
                     type="text"
                     placeholder="请输入详细地址"
@@ -355,7 +356,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
               </div>
               <div className="w-1/3">
                 <label className={labelCls}>默认配送</label>
-                <select
+                <FauxSelect
                   value={form.defaultDelivery}
                   onChange={(e) => set("defaultDelivery", e.target.value)}
                   className={selectCls}
@@ -363,7 +364,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="">请选择</option>
                   <option value="收货地址">收货地址</option>
                   <option value="注册地址">注册地址</option>
-                </select>
+                </FauxSelect>
               </div>
             </div>
           </div>
@@ -394,7 +395,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
               </div>
               <div>
                 <label className={labelCls}>客户来源</label>
-                <select
+                <FauxSelect
                   value={form.customerSource}
                   onChange={(e) => set("customerSource", e.target.value)}
                   className={selectCls}
@@ -405,11 +406,11 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="门店自然客流">门店自然客流</option>
                   <option value="电话营销">电话营销</option>
                   <option value="其他">其他</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>客户经理</label>
-                <select
+                <FauxSelect
                   value={form.accountManager}
                   onChange={(e) => set("accountManager", e.target.value)}
                   className={selectCls}
@@ -418,11 +419,11 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="黄伟霆">黄伟霆</option>
                   <option value="李明">李明</option>
                   <option value="王芳">王芳</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>往来类别</label>
-                <select
+                <FauxSelect
                   value={form.tradeCategory}
                   onChange={(e) => set("tradeCategory", e.target.value)}
                   className={selectCls}
@@ -431,11 +432,11 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="客户">客户</option>
                   <option value="供应商">供应商</option>
                   <option value="即客即供">即客即供</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>价格级别</label>
-                <select
+                <FauxSelect
                   value={form.priceLevel}
                   onChange={(e) => set("priceLevel", e.target.value)}
                   className={selectCls}
@@ -445,7 +446,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="批发价">批发价</option>
                   <option value="VIP价">VIP价</option>
                   <option value="成本价">成本价</option>
-                </select>
+                </FauxSelect>
               </div>
             </div>
           </div>
@@ -484,7 +485,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                       <tr key={item.id} className="border-b border-gray-100 last:border-0">
                         <td className="px-4 py-2 text-sm text-gray-600">{index + 1}</td>
                         <td className="px-4 py-2">
-                          <select
+                          <FauxSelect
                             value={item.category}
                             onChange={(e) => updatePriceCategory(item.id, "category", e.target.value)}
                             className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:border-blue-400 text-sm"
@@ -495,10 +496,10 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                             <option value="油品">油品</option>
                             <option value="点火系统">点火系统</option>
                             <option value="传动系统">传动系统</option>
-                          </select>
+                          </FauxSelect>
                         </td>
                         <td className="px-4 py-2">
-                          <select
+                          <FauxSelect
                             value={item.priceLevel}
                             onChange={(e) => updatePriceCategory(item.id, "priceLevel", e.target.value)}
                             className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:border-blue-400 text-sm"
@@ -508,7 +509,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                             <option value="批发价">批发价</option>
                             <option value="VIP价">VIP价</option>
                             <option value="成本价">成本价</option>
-                          </select>
+                          </FauxSelect>
                         </td>
                         <td className="px-4 py-2">
                           <button
@@ -532,7 +533,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className={labelCls}>结算方式</label>
-                <select
+                <FauxSelect
                   value={form.settlementMethod}
                   onChange={(e) => set("settlementMethod", e.target.value)}
                   className={selectCls}
@@ -542,11 +543,11 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="月结">月结</option>
                   <option value="季结">季结</option>
                   <option value="年结">年结</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>结款周期</label>
-                <select
+                <FauxSelect
                   value={form.paymentCycle}
                   onChange={(e) => set("paymentCycle", e.target.value)}
                   className={selectCls}
@@ -555,11 +556,11 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="月结">月结</option>
                   <option value="季结">季结</option>
                   <option value="现结">现结</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>开票类型</label>
-                <select
+                <FauxSelect
                   value={form.invoiceType}
                   onChange={(e) => set("invoiceType", e.target.value)}
                   className={selectCls}
@@ -568,7 +569,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="增值税专用发票">增值税专用发票</option>
                   <option value="普通发票">普通发票</option>
                   <option value="不开票">不开票</option>
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className={labelCls}>社会信用代码</label>
@@ -649,7 +650,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
               </div>
               <div>
                 <label className={labelCls}>客户类型</label>
-                <select
+                <FauxSelect
                   value={form.customerType}
                   onChange={(e) => set("customerType", e.target.value)}
                   className={selectCls}
@@ -658,7 +659,7 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   <option value="个人客户">个人客户</option>
                   <option value="企业客户">企业客户</option>
                   <option value="VIP客户">VIP客户</option>
-                </select>
+                </FauxSelect>
               </div>
               <div className="col-span-3">
                 <label className={labelCls}>备注</label>

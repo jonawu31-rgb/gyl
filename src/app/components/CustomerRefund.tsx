@@ -12,6 +12,7 @@ import {
   Close as CloseIcon,
   Refresh as RefreshIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 type TabKey = "order" | "draft" | "record";
 
@@ -106,18 +107,18 @@ function OrderTab() {
       <div className="grid grid-cols-3 gap-4 mb-5">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">客户 <span className="text-red-500">*</span></label>
-          <select value={customer} onChange={e => setCustomer(e.target.value)}
+          <FauxSelect value={customer} onChange={e => setCustomer(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm">
             <option value="">请选择客户</option>
             {CUSTOMERS.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          </FauxSelect>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">退货原因 <span className="text-red-500">*</span></label>
-          <select value={reason} onChange={e => setReason(e.target.value)}
+          <FauxSelect value={reason} onChange={e => setReason(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm">
             {REASONS.map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
+          </FauxSelect>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">备注</label>
@@ -142,10 +143,10 @@ function OrderTab() {
             ) : items.map(it => (
               <tr key={it.id} className="border-b border-gray-100">
                 <td className="px-4 py-2">
-                  <select value={it.productName} onChange={e => { const p = PRODUCTS.find(p => p.name === e.target.value); if (p) { updateItem(it.id, "productName", p.name); updateItem(it.id, "spec", p.spec); updateItem(it.id, "unitPrice", p.unitPrice); } }}
+                  <FauxSelect value={it.productName} onChange={e => { const p = PRODUCTS.find(p => p.name === e.target.value); if (p) { updateItem(it.id, "productName", p.name); updateItem(it.id, "spec", p.spec); updateItem(it.id, "unitPrice", p.unitPrice); } }}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400">
                     {PRODUCTS.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
-                  </select>
+                  </FauxSelect>
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-600 whitespace-nowrap">{it.spec}</td>
                 <td className="px-4 py-2 w-24">

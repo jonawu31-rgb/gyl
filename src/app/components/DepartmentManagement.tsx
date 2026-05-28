@@ -7,6 +7,7 @@ import {
   Close as CloseIcon,
   Warning as WarningIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface Department {
   id: string;
@@ -482,7 +483,7 @@ export function DepartmentManagement() {
             <label className="text-sm text-gray-700 whitespace-nowrap shrink-0 w-12">
               状态:
             </label>
-            <select
+            <FauxSelect
               value={searchStatus}
               onChange={(e) => {
                 setSearchStatus(e.target.value);
@@ -493,7 +494,7 @@ export function DepartmentManagement() {
               <option value="">请选择状态</option>
               <option value="启用">启用</option>
               <option value="停用">停用</option>
-            </select>
+            </FauxSelect>
           </div>
           <button
             onClick={() => setCurrentPage(1)}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Close as CloseIcon } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface SalesCartDialogProps {
   open: boolean;
@@ -43,7 +44,7 @@ export function SalesCartDialog({ open, onClose, cartData }: SalesCartDialogProp
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 客户 <span className="text-red-500">*</span>
               </label>
-              <select
+              <FauxSelect
                 value={formData.customer}
                 onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -52,7 +53,7 @@ export function SalesCartDialog({ open, onClose, cartData }: SalesCartDialogProp
                 <option value="黄山佳辉汽配">黄山佳辉汽配</option>
                 <option value="济南恒通汽车">济南恒通汽车</option>
                 <option value="深圳明辉配件">深圳明辉配件</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 手推车编号 */}
@@ -87,7 +88,7 @@ export function SalesCartDialog({ open, onClose, cartData }: SalesCartDialogProp
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 业务员
               </label>
-              <select
+              <FauxSelect
                 value={formData.salesperson}
                 onChange={(e) => setFormData({ ...formData, salesperson: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -96,7 +97,7 @@ export function SalesCartDialog({ open, onClose, cartData }: SalesCartDialogProp
                 <option value="管理员">管理员</option>
                 <option value="张三">张三</option>
                 <option value="李四">李四</option>
-              </select>
+              </FauxSelect>
             </div>
 
             {/* 车架号 */}

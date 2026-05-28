@@ -8,6 +8,7 @@ import {
   Search as SearchIcon,
   WarningAmber as WarningAmberIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 type TagRow = {
   id: string;
@@ -256,7 +257,7 @@ export function PartsTagManagement() {
 
           <div className="flex items-center gap-2">
             <div className="relative">
-              <select
+              <FauxSelect
                 value={pageSize}
                 onChange={(e) => {
                   setPageSize(Number(e.target.value));
@@ -269,7 +270,7 @@ export function PartsTagManagement() {
                     {item}条/页
                   </option>
                 ))}
-              </select>
+              </FauxSelect>
               <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">▾</span>
             </div>
 

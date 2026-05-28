@@ -7,6 +7,7 @@ import {
   CloudUpload as UploadIcon,
   Image as ImageIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface PartsDataDialogProps {
   open: boolean;
@@ -213,18 +214,18 @@ export function PartsDataDialog({ open, onClose, onSave, editData }: PartsDataDi
                   {/* 单位 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0"><span className="text-red-500">*</span>单位:</label>
-                    <select value={formData.unit} onChange={(e) => set("unit", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.unit} onChange={(e) => set("unit", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["个", "套", "根", "片", "桶", "瓶", "支", "条", "对"].map((u) => <option key={u} value={u}>{u}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 默认仓库 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">默认仓库:</label>
-                    <select value={formData.defaultWarehouse} onChange={(e) => set("defaultWarehouse", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.defaultWarehouse} onChange={(e) => set("defaultWarehouse", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["主仓", "B仓", "C仓"].map((w) => <option key={w} value={w}>{w}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 品类 */}
                   <div className="flex items-center gap-2">
@@ -234,26 +235,26 @@ export function PartsDataDialog({ open, onClose, onSave, editData }: PartsDataDi
                   {/* 产地 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">产地:</label>
-                    <select value={formData.origin} onChange={(e) => set("origin", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.origin} onChange={(e) => set("origin", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["中国", "德国", "日本", "美国", "英国", "韩国"].map((o) => <option key={o} value={o}>{o}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 供应商 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">供应商:</label>
-                    <select value={formData.supplier} onChange={(e) => set("supplier", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.supplier} onChange={(e) => set("supplier", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["博世汽配", "曼牌汽配", "马勒亚太", "NGK中国", "太平洋橡胶"].map((s) => <option key={s} value={s}>{s}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 品牌 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">品牌:</label>
-                    <select value={formData.brand} onChange={(e) => set("brand", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.brand} onChange={(e) => set("brand", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择/搜索</option>
                       {["博世", "曼牌", "马勒", "NGK", "PIAA", "美孚", "嘉实多"].map((b) => <option key={b} value={b}>{b}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 特征 */}
                   <div className="flex items-center gap-2">
@@ -273,26 +274,26 @@ export function PartsDataDialog({ open, onClose, onSave, editData }: PartsDataDi
                   {/* 畅销等级 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">畅销等级:</label>
-                    <select value={formData.salesRank} onChange={(e) => set("salesRank", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.salesRank} onChange={(e) => set("salesRank", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["爆款", "平销款", "滞销款"].map((r) => <option key={r} value={r}>{r}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 产品经理 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">产品经理:</label>
-                    <select value={formData.productManager} onChange={(e) => set("productManager", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.productManager} onChange={(e) => set("productManager", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["张三", "李四", "王五", "赵六"].map((p) => <option key={p} value={p}>{p}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 类别 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">类别:</label>
-                    <select value={formData.partClass} onChange={(e) => set("partClass", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.partClass} onChange={(e) => set("partClass", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
                       {["制动系统", "过滤系统", "点火系统", "润滑保养", "车身附件", "轮胎附件"].map((c) => <option key={c} value={c}>{c}</option>)}
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 外文名 */}
                   <div className="flex items-center gap-2">
@@ -317,9 +318,9 @@ export function PartsDataDialog({ open, onClose, onSave, editData }: PartsDataDi
                   {/* 通用码 */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-gray-700 w-20 shrink-0">通用码:</label>
-                    <select value={formData.universalCode} onChange={(e) => set("universalCode", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                    <FauxSelect value={formData.universalCode} onChange={(e) => set("universalCode", e.target.value)} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500">
                       <option value="">请选择</option>
-                    </select>
+                    </FauxSelect>
                   </div>
                   {/* 重量 */}
                   <div className="flex items-center gap-2">
@@ -425,7 +426,7 @@ export function PartsDataDialog({ open, onClose, onSave, editData }: PartsDataDi
                           </div>
                         </td>
                         <td className="px-4 py-2">
-                          <select
+                          <FauxSelect
                             value={priceConfigValues[i].template}
                             onChange={(e) => {
                               const updated = [...priceConfigValues];
@@ -438,7 +439,7 @@ export function PartsDataDialog({ open, onClose, onSave, editData }: PartsDataDi
                             <option value="参考价 × 1.2">参考价 × 1.2</option>
                             <option value="零售价 × 0.9">零售价 × 0.9</option>
                             <option value="批发价 × 1.1">批发价 × 1.1</option>
-                          </select>
+                          </FauxSelect>
                         </td>
                         <td className="px-4 py-2 text-xs text-gray-500">{row.remark}</td>
                       </tr>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Close as CloseIcon } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface SalesHistoryEditSalespersonDialogProps {
   open: boolean;
@@ -48,7 +49,7 @@ export function SalesHistoryEditSalespersonDialog({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               销售员 <span className="text-red-500">*</span>
             </label>
-            <select
+            <FauxSelect
               value={selectedSalesperson}
               onChange={(e) => setSelectedSalesperson(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
@@ -58,7 +59,7 @@ export function SalesHistoryEditSalespersonDialog({
               <option value="张销售">张销售</option>
               <option value="王销售">王销售</option>
               <option value="赵销售">赵销售</option>
-            </select>
+            </FauxSelect>
           </div>
         </div>
 

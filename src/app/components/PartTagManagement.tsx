@@ -7,6 +7,7 @@ import {
   Close as CloseIcon,
   Warning as WarningIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface PartTag {
   id: string;
@@ -269,7 +270,7 @@ export function PartTagManagement() {
           共 <span className="font-semibold text-gray-800">{filtered.length}</span> 条数据
         </div>
         <div className="flex items-center gap-2">
-          <select
+          <FauxSelect
             value={pageSize}
             onChange={(e) => { setPageSize(Number(e.target.value)); goToPage(1); }}
             className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-blue-400"
@@ -277,7 +278,7 @@ export function PartTagManagement() {
             {[10, 20, 30, 40, 50].map((n) => (
               <option key={n} value={n}>{n}条/页</option>
             ))}
-          </select>
+          </FauxSelect>
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}

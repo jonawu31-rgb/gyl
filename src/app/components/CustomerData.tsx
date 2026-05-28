@@ -7,6 +7,7 @@ import {
   Search as SearchIcon,
   Remove as MinusIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 import { CustomerDataDialog, CustomerFormData } from "./CustomerDataDialog";
 
 interface Customer {
@@ -366,49 +367,49 @@ export function CustomerData() {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">性别</span>
-            <select value={filterGender} onChange={(e) => setFilterGender(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
+            <FauxSelect value={filterGender} onChange={(e) => setFilterGender(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
               <option value="">请选择</option>
               <option value="男">男</option>
               <option value="女">女</option>
-            </select>
+            </FauxSelect>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">标签</span>
-            <select value={filterTag} onChange={(e) => setFilterTag(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
+            <FauxSelect value={filterTag} onChange={(e) => setFilterTag(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
               <option value="">请选择标签</option>
               {ALL_TAGS.map((t) => (
                 <option key={t} value={t}>{t}</option>
               ))}
-            </select>
+            </FauxSelect>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">往来类别</span>
-            <select value={filterTradeCategory} onChange={(e) => setFilterTradeCategory(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
+            <FauxSelect value={filterTradeCategory} onChange={(e) => setFilterTradeCategory(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
               <option value="">请选择</option>
               <option value="客户">客户</option>
               <option value="供应商">供应商</option>
               <option value="即客即供">即客即供</option>
-            </select>
+            </FauxSelect>
           </div>
         </div>
         {/* Row 2 */}
         <div className="grid grid-cols-4 gap-x-3 gap-y-2.5 mb-2.5">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">结算方式</span>
-            <select value={filterSettlement} onChange={(e) => setFilterSettlement(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
+            <FauxSelect value={filterSettlement} onChange={(e) => setFilterSettlement(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
               <option value="">请选择</option>
               <option value="现结">现结</option>
               <option value="月结">月结</option>
               <option value="季结">季结</option>
-            </select>
+            </FauxSelect>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">是否成交</span>
-            <select value={filterDeal} onChange={(e) => setFilterDeal(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
+            <FauxSelect value={filterDeal} onChange={(e) => setFilterDeal(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
               <option value="">请选择</option>
               <option value="有成交">有成交</option>
               <option value="无成交">无成交</option>
-            </select>
+            </FauxSelect>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">消费金额</span>
@@ -639,7 +640,7 @@ export function CustomerData() {
             共 <span className="font-semibold text-gray-800">{customers.length}</span> 条数据
           </div>
           <div className="flex items-center gap-2">
-            <select
+            <FauxSelect
               value={pageSize}
               onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
               className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-blue-400"
@@ -647,7 +648,7 @@ export function CustomerData() {
               <option value={20}>20条/页</option>
               <option value={50}>50条/页</option>
               <option value={100}>100条/页</option>
-            </select>
+            </FauxSelect>
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}

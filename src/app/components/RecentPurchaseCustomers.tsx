@@ -4,6 +4,7 @@ import {
   Refresh as RefreshIcon,
   FileDownload as FileDownloadIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 import {
   PieChart,
   Pie,
@@ -65,7 +66,7 @@ function NewCustomerRatioTab() {
           />
         </div>
         <span className="text-sm text-gray-700 shrink-0 ml-2">业务员</span>
-        <select
+        <FauxSelect
           value={salesperson}
           onChange={(e) => setSalesperson(e.target.value)}
           className="px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm min-w-[120px]"
@@ -76,7 +77,7 @@ function NewCustomerRatioTab() {
           <option value="王强">王强</option>
           <option value="陈静">陈静</option>
           <option value="刘洋">刘洋</option>
-        </select>
+        </FauxSelect>
         <button
           onClick={handleQuery}
           className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm hover:shadow flex items-center gap-1.5"

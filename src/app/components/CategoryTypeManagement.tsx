@@ -7,6 +7,7 @@ import {
   ExpandMore as ExpandMoreIcon,
   ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface CategoryType {
   id: number;
@@ -480,7 +481,7 @@ export function CategoryTypeManagement() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   上级品类
                 </label>
-                <select
+                <FauxSelect
                   value={formData.parentId ?? ""}
                   onChange={(e) =>
                     setFormData({
@@ -496,7 +497,7 @@ export function CategoryTypeManagement() {
                       {cat.categoryName}
                     </option>
                   ))}
-                </select>
+                </FauxSelect>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

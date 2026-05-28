@@ -7,6 +7,7 @@ import {
   Close as CloseIcon,
   Warning as WarningIcon,
 } from "@mui/icons-material";
+import { FauxSelect } from "./ui/FauxSelect";
 
 interface SalaryRecord {
   id: string;
@@ -314,14 +315,14 @@ function EmployeeDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden">
         <div
-          className="px-5 py-3 border-b border-gray-200 flex items-center justify-between"
+          className="px-5 py-2.5 border-b border-gray-200 rounded-t-xl flex items-center justify-between"
           style={{ backgroundColor: "#F9FAFB" }}
         >
-          <h3 className="text-base font-bold text-gray-800">
+          <h2 className="text-lg font-bold text-gray-800">
             {editData ? "编辑员工" : "新增员工"}
-          </h3>
+          </h2>
           <button
             onClick={onClose}
             className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded transition-colors"
@@ -331,438 +332,409 @@ function EmployeeDialog({
         </div>
 
         {/* Tabs */}
-        <div className="px-5 py-4 border-b border-gray-200 shrink-0">
-          <div className="flex gap-2">
+        <div className="border-b border-gray-200 bg-gray-50 px-6 shrink-0">
+          <div className="flex gap-1">
             {["员工信息", "员工工资"].map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentTab(index)}
-                className={`px-5 py-2 text-sm font-medium transition-all rounded-lg ${
+                className={`px-6 py-3 text-sm font-medium transition-all relative ${
                   currentTab === index
-                    ? "bg-blue-600 text-white"
+                    ? "text-blue-600 bg-white"
                     : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                 }`}
               >
                 {tab}
+                {currentTab === index && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+                )}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="flex-1 overflow-auto p-5">
+        <div className="flex-1 overflow-auto p-6">
           {currentTab === 0 ? (
             /* 员工信息 Tab */
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              {/* 左列 */}
-              <div className="space-y-4">
-                {/* 姓名 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <span className="text-red-500">*</span> 姓名
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="请输入姓名"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                  />
-                </div>
+            <div className="grid grid-cols-3 gap-x-6 gap-y-3">
+              {/* 姓名 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">
+                  <span className="text-red-500">*</span> 姓名:
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                />
+              </div>
 
-                {/* 身份证号 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    身份证号
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="请输入身份证号"
-                    value={formData.idCard}
-                    onChange={(e) =>
-                      setFormData({ ...formData, idCard: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                  />
-                </div>
+              {/* 联系电话 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">
+                  <span className="text-red-500">*</span> 联系电话:
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                />
+              </div>
 
-                {/* 性别 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    性别
-                  </label>
-                  <select
-                    value={formData.gender}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        gender: e.target.value as any,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  >
-                    <option value="">请选择</option>
-                    <option value="男">男</option>
-                    <option value="女">女</option>
-                  </select>
-                </div>
+              {/* 员工工号 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">
+                  <span className="text-red-500">*</span> 员工工号:
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入"
+                  value={formData.employeeNo}
+                  onChange={(e) =>
+                    setFormData({ ...formData, employeeNo: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                />
+              </div>
 
-                {/* 状态 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    状态 <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.status === "在职"}
-                        onChange={() =>
-                          setFormData({ ...formData, status: "在职" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">在职</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.status === "离职"}
-                        onChange={() =>
-                          setFormData({ ...formData, status: "离职" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">离职</span>
-                    </label>
-                  </div>
-                </div>
+              {/* 身份证号 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">身份证号:</label>
+                <input
+                  type="text"
+                  placeholder="请输入"
+                  value={formData.idCard}
+                  onChange={(e) =>
+                    setFormData({ ...formData, idCard: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                />
+              </div>
 
-                {/* 离职日期 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    离职日期
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.resignDate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, resignDate: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  />
-                </div>
+              {/* 性别 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">性别:</label>
+                <FauxSelect
+                  value={formData.gender}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      gender: e.target.value as any,
+                    })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">请选择</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+                </FauxSelect>
+              </div>
 
-                {/* 显示完整客户手机号 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    显示完整客户手机号 <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.showFullPhone === "是"}
-                        onChange={() =>
-                          setFormData({ ...formData, showFullPhone: "是" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">是</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.showFullPhone === "否"}
-                        onChange={() =>
-                          setFormData({ ...formData, showFullPhone: "否" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">否</span>
-                    </label>
-                  </div>
-                </div>
+              {/* 住址 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">住址:</label>
+                <input
+                  type="text"
+                  placeholder="请输入"
+                  value={formData.address}
+                  onChange={(e) =>
+                    setFormData({ ...formData, address: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                />
+              </div>
 
-                {/* 工作时间外可登录 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    工作时间外可登录 <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.canLoginOffHours === "是"}
-                        onChange={() =>
-                          setFormData({ ...formData, canLoginOffHours: "是" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">是</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.canLoginOffHours === "否"}
-                        onChange={() =>
-                          setFormData({ ...formData, canLoginOffHours: "否" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">否</span>
-                    </label>
-                  </div>
-                </div>
+              {/* 入职日期 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">入职日期:</label>
+                <input
+                  type="date"
+                  value={formData.hireDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, hireDate: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                />
+              </div>
 
-                {/* 部门 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    部门
-                  </label>
-                  <select
-                    value={formData.deptId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, deptId: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  >
-                    <option value="">请选择</option>
-                    {mockDepartments.map((dept) => (
-                      <option key={dept.id} value={dept.id}>
-                        {dept.name}
+              {/* 离职日期 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">离职日期:</label>
+                <input
+                  type="date"
+                  value={formData.resignDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, resignDate: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              {/* 部门 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">部门:</label>
+                <FauxSelect
+                  value={formData.deptId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, deptId: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">请选择</option>
+                  {mockDepartments.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </FauxSelect>
+              </div>
+
+              {/* 直属上级 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">直属上级:</label>
+                <FauxSelect
+                  value={formData.supervisorId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      supervisorId: e.target.value,
+                    })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">请选择</option>
+                  {allEmployees
+                    .filter((emp) => emp.id !== editData?.id)
+                    .map((emp) => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.name}
                       </option>
                     ))}
-                  </select>
-                </div>
+                </FauxSelect>
+              </div>
 
-                {/* 所属角色 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    所属角色
+              {/* 所属角色 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">所属角色:</label>
+                <FauxSelect
+                  value={formData.roleId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, roleId: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">请选择</option>
+                  {mockRoles.map((role) => (
+                    <option key={role.id} value={role.id}>
+                      {role.name}
+                    </option>
+                  ))}
+                </FauxSelect>
+              </div>
+
+              {/* 员工工种 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">员工工种:</label>
+                <FauxSelect
+                  value={formData.workTypeId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, workTypeId: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">请选择</option>
+                  {mockWorkTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name}
+                    </option>
+                  ))}
+                </FauxSelect>
+              </div>
+
+              {/* 密码 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">密码:</label>
+                <input
+                  type="password"
+                  placeholder={editData ? "留空则不修改" : "请输入"}
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                />
+              </div>
+
+              {/* 状态 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">
+                  <span className="text-red-500">*</span> 状态:
+                </label>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.status === "在职"}
+                      onChange={() =>
+                        setFormData({ ...formData, status: "在职" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">在职</span>
                   </label>
-                  <select
-                    value={formData.roleId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, roleId: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  >
-                    <option value="">请选择</option>
-                    {mockRoles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.name}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.status === "离职"}
+                      onChange={() =>
+                        setFormData({ ...formData, status: "离职" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">离职</span>
+                  </label>
                 </div>
               </div>
 
-              {/* 右列 */}
-              <div className="space-y-4">
-                {/* 联系电话 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <span className="text-red-500">*</span> 联系电话
+              {/* 是否老板 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">
+                  <span className="text-red-500">*</span> 是否老板:
+                </label>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.isBoss === "是"}
+                      onChange={() =>
+                        setFormData({ ...formData, isBoss: "是" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">是</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="请输入联系电话"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                  />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.isBoss === "否"}
+                      onChange={() =>
+                        setFormData({ ...formData, isBoss: "否" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">否</span>
+                  </label>
                 </div>
+              </div>
 
-                {/* 员工工号 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <span className="text-red-500">*</span> 员工工号
+              {/* 是否司机 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">
+                  <span className="text-red-500">*</span> 是否司机:
+                </label>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.isDriver === "是"}
+                      onChange={() =>
+                        setFormData({ ...formData, isDriver: "是" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">是</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="请输入员工工号"
-                    value={formData.employeeNo}
-                    onChange={(e) =>
-                      setFormData({ ...formData, employeeNo: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                  />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.isDriver === "否"}
+                      onChange={() =>
+                        setFormData({ ...formData, isDriver: "否" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">否</span>
+                  </label>
                 </div>
+              </div>
 
-                {/* 住址 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    住址
+              {/* 显示完整客户手机号 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">显示完整手机:</label>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.showFullPhone === "是"}
+                      onChange={() =>
+                        setFormData({ ...formData, showFullPhone: "是" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">是</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="请输入住址"
-                    value={formData.address}
-                    onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                  />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.showFullPhone === "否"}
+                      onChange={() =>
+                        setFormData({ ...formData, showFullPhone: "否" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">否</span>
+                  </label>
                 </div>
+              </div>
 
-                {/* 入职日期 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    入职日期
+              {/* 工作时间外可登录 */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0">非工时登录:</label>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.canLoginOffHours === "是"}
+                      onChange={() =>
+                        setFormData({ ...formData, canLoginOffHours: "是" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">是</span>
                   </label>
-                  <input
-                    type="date"
-                    value={formData.hireDate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, hireDate: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  />
-                </div>
-
-                {/* 是否老板 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    是否老板 <span className="text-red-500">*</span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={formData.canLoginOffHours === "否"}
+                      onChange={() =>
+                        setFormData({ ...formData, canLoginOffHours: "否" })
+                      }
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">否</span>
                   </label>
-                  <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.isBoss === "是"}
-                        onChange={() =>
-                          setFormData({ ...formData, isBoss: "是" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">是</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.isBoss === "否"}
-                        onChange={() =>
-                          setFormData({ ...formData, isBoss: "否" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">否</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* 是否司机 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    是否司机 <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.isDriver === "是"}
-                        onChange={() =>
-                          setFormData({ ...formData, isDriver: "是" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">是</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.isDriver === "否"}
-                        onChange={() =>
-                          setFormData({ ...formData, isDriver: "否" })
-                        }
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">否</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* 密码 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    密码
-                  </label>
-                  <input
-                    type="password"
-                    placeholder={editData ? "留空则不修改" : "请输入密码"}
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                  />
-                </div>
-
-                {/* 直属上级 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    直属上级
-                  </label>
-                  <select
-                    value={formData.supervisorId}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        supervisorId: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  >
-                    <option value="">请选择</option>
-                    {allEmployees
-                      .filter((emp) => emp.id !== editData?.id)
-                      .map((emp) => (
-                        <option key={emp.id} value={emp.id}>
-                          {emp.name}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                {/* 员工工种 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    员工工种
-                  </label>
-                  <select
-                    value={formData.workTypeId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, workTypeId: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                  >
-                    <option value="">请选择</option>
-                    {mockWorkTypes.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
                 </div>
               </div>
 
               {/* 备注 - 占满整行 */}
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  备注
-                </label>
+              <div className="col-span-3 flex items-start gap-2">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 pt-1.5">备注:</label>
                 <textarea
-                  placeholder="请输入备注"
+                  placeholder="请输入"
                   value={formData.remark}
                   onChange={(e) =>
                     setFormData({ ...formData, remark: e.target.value })
                   }
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
+                  rows={2}
+                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none placeholder:text-gray-400"
                 />
               </div>
             </div>
@@ -770,29 +742,24 @@ function EmployeeDialog({
             /* 员工工资 Tab */
             <div className="space-y-4">
               {/* 工资表单 */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    员工工资
-                  </label>
+              <div className="grid grid-cols-3 gap-x-6 gap-y-3">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 w-24 shrink-0">员工工资:</label>
                   <input
                     type="text"
-                    placeholder="请输入员工工资"
+                    placeholder="请输入"
                     value={salaryForm.salary}
                     onChange={(e) =>
                       setSalaryForm({ ...salaryForm, salary: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
+                    className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    选择日期
-                  </label>
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 col-span-2">
+                  <label className="text-sm font-medium text-gray-700 w-24 shrink-0">选择日期:</label>
+                  <div className="flex-1 flex items-center gap-2">
                     <input
                       type="date"
-                      placeholder="开始日期"
                       value={salaryForm.startDate}
                       onChange={(e) =>
                         setSalaryForm({
@@ -800,12 +767,11 @@ function EmployeeDialog({
                           startDate: e.target.value,
                         })
                       }
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
+                      className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                     />
                     <span className="text-sm text-gray-500">至</span>
                     <input
                       type="date"
-                      placeholder="结束日期"
                       value={salaryForm.endDate}
                       onChange={(e) =>
                         setSalaryForm({
@@ -813,63 +779,60 @@ function EmployeeDialog({
                           endDate: e.target.value,
                         })
                       }
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
+                      className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                     />
                   </div>
                 </div>
+                <div className="col-span-3 flex items-start gap-2">
+                  <label className="text-sm font-medium text-gray-700 w-24 shrink-0 pt-1.5">备注:</label>
+                  <textarea
+                    placeholder="请输入"
+                    value={salaryForm.remark}
+                    onChange={(e) =>
+                      setSalaryForm({ ...salaryForm, remark: e.target.value })
+                    }
+                    rows={2}
+                    className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none placeholder:text-gray-400"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  备注
-                </label>
-                <textarea
-                  placeholder="请输入备注"
-                  value={salaryForm.remark}
-                  onChange={(e) =>
-                    setSalaryForm({ ...salaryForm, remark: e.target.value })
-                  }
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-                />
-              </div>
-
-              <div className="flex justify-center gap-3">
+              <div className="flex justify-center gap-3 pt-2">
                 <button
                   onClick={handleResetSalaryForm}
-                  className="px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-4 py-1.5 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   重置
                 </button>
                 <button
                   onClick={handleAddSalary}
-                  className="px-4 py-2 text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all"
+                  className="px-4 py-1.5 text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all"
                 >
                   确定
                 </button>
               </div>
 
               {/* 工资记录列表 */}
-              <div className="mt-6">
-                <table className="w-full border border-gray-200">
+              <div className="mt-4">
+                <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
                   <thead className="bg-gray-50">
                     <tr className="border-b border-gray-200">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
                         序号
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
                         工资
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
                         开始日期
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
                         结束日期
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">
                         备注
                       </th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <th className="px-4 py-2.5 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                         操作
                       </th>
                     </tr>
@@ -879,7 +842,7 @@ function EmployeeDialog({
                       <tr>
                         <td
                           colSpan={6}
-                          className="px-4 py-16 text-center text-sm text-gray-400"
+                          className="px-4 py-12 text-center text-sm text-gray-400"
                         >
                           暂无数据
                         </td>
@@ -888,24 +851,24 @@ function EmployeeDialog({
                       salaryRecords.map((record, idx) => (
                         <tr
                           key={record.id}
-                          className="border-b border-gray-100 hover:bg-blue-50/40 transition-colors"
+                          className="border-b border-gray-100 last:border-0 hover:bg-blue-50/40 transition-colors"
                         >
-                          <td className="px-4 py-2.5 text-sm text-gray-700">
+                          <td className="px-4 py-2 text-sm text-gray-700">
                             {idx + 1}
                           </td>
-                          <td className="px-4 py-2.5 text-sm text-gray-700">
+                          <td className="px-4 py-2 text-sm text-gray-700">
                             {record.salary}
                           </td>
-                          <td className="px-4 py-2.5 text-sm text-gray-600">
+                          <td className="px-4 py-2 text-sm text-gray-600">
                             {record.startDate || "—"}
                           </td>
-                          <td className="px-4 py-2.5 text-sm text-gray-600">
+                          <td className="px-4 py-2 text-sm text-gray-600">
                             {record.endDate || "—"}
                           </td>
-                          <td className="px-4 py-2.5 text-sm text-gray-600">
+                          <td className="px-4 py-2 text-sm text-gray-600">
                             {record.remark || "—"}
                           </td>
-                          <td className="px-4 py-2.5 text-center">
+                          <td className="px-4 py-2 text-center">
                             <button
                               onClick={() => handleDeleteSalary(record.id)}
                               className="text-sm text-red-500 hover:text-red-700 hover:underline transition-colors"
@@ -923,18 +886,18 @@ function EmployeeDialog({
           )}
         </div>
 
-        <div className="px-5 py-3 border-t border-gray-200 flex justify-end gap-2 bg-gray-50 rounded-b-xl">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            取消
-          </button>
+        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-xl flex justify-end gap-2">
           <button
             onClick={handleSave}
-            className="px-4 py-2 text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all"
+            className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm"
           >
-            确定
+            保存
+          </button>
+          <button
+            onClick={onClose}
+            className="px-6 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors border border-gray-300"
+          >
+            关闭
           </button>
         </div>
       </div>
@@ -1111,7 +1074,7 @@ export function EmployeeManagement() {
             <label className="text-sm text-gray-700 whitespace-nowrap shrink-0 w-12">
               状态:
             </label>
-            <select
+            <FauxSelect
               value={searchStatus}
               onChange={(e) => {
                 setSearchStatus(e.target.value);
@@ -1122,7 +1085,7 @@ export function EmployeeManagement() {
               <option value="">请选择状态</option>
               <option value="在职">在职</option>
               <option value="离职">离职</option>
-            </select>
+            </FauxSelect>
           </div>
           <button
             onClick={() => setCurrentPage(1)}
