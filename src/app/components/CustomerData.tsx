@@ -126,7 +126,7 @@ const MOCK_CUSTOMERS: Customer[] = [
 
 const ALL_TAGS = ["VIP客户", "优质客户", "新客户", "潜力客户", "重点维护", "欠款客户"];
 
-type DialogType = "addEdit" | "tag" | "reconcile" | "repayment" | "documents" | "delete" | "employee" | null;
+type DialogType = "addEdit" | "view" | "tag" | "reconcile" | "repayment" | "documents" | "delete" | "employee" | null;
 
 interface RepaymentRecord {
   id: string;
@@ -155,7 +155,8 @@ export function CustomerData() {
   const [filterTag, setFilterTag] = useState("");
   const [filterTradeCategory, setFilterTradeCategory] = useState("");
   const [filterSettlement, setFilterSettlement] = useState("");
-  const [filterDeal, setFilterDeal] = useState("");
+  const [filterAccountManager, setFilterAccountManager] = useState("");
+  const [showMoreQuery, setShowMoreQuery] = useState(false);
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
   const [filterLocation, setFilterLocation] = useState("");
@@ -212,7 +213,8 @@ export function CustomerData() {
     setFilterTag("");
     setFilterTradeCategory("");
     setFilterSettlement("");
-    setFilterDeal("");
+    setFilterAccountManager("");
+    setShowMoreQuery(false);
     setMinAmount("");
     setMaxAmount("");
     setFilterLocation("");
@@ -245,6 +247,7 @@ export function CustomerData() {
       remark: customer.remark,
       creditLimit: String(customer.creditLimit),
       initialDebt: String(customer.initialDebt),
+      tags: [...customer.tags],
     });
     setOpenDialog("addEdit");
   };
@@ -266,6 +269,7 @@ export function CustomerData() {
                 remark: data.remark,
                 creditLimit: Number(data.creditLimit) || 0,
                 initialDebt: Number(data.initialDebt) || 0,
+                tags: data.tags || [],
               }
             : c
         )
@@ -288,7 +292,7 @@ export function CustomerData() {
         paymentCycle: data.paymentCycle,
         accountManager: data.accountManager,
         remark: data.remark,
-        tags: [],
+        tags: data.tags || [],
         createTime: new Date().toISOString().replace("T", " ").slice(0, 19),
         tradeCategory: data.tradeCategory || "客户",
         settlementMethod: data.settlementMethod,
@@ -404,11 +408,12 @@ export function CustomerData() {
             </FauxSelect>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">是否成交</span>
-            <FauxSelect value={filterDeal} onChange={(e) => setFilterDeal(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
+            <span className="text-sm text-gray-600 shrink-0 w-16 whitespace-nowrap">客户经理</span>
+            <FauxSelect value={filterAccountManager} onChange={(e) => setFilterAccountManager(e.target.value)} className={`flex-1 min-w-0 ${selectCls}`}>
               <option value="">请选择</option>
-              <option value="有成交">有成交</option>
-              <option value="无成交">无成交</option>
+              <option value="黄伟霆">黄伟霆</option>
+              <option value="李明">李明</option>
+              <option value="王芳">王芳</option>
             </FauxSelect>
           </div>
           <div className="flex items-center gap-2">
@@ -456,6 +461,12 @@ export function CustomerData() {
             className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
           >
             重置
+          </button>
+          <button
+            onClick={() => setShowMoreQuery(true)}
+            className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
+          >
+            更多查询
           </button>
         </div>
       </div>
@@ -572,10 +583,15 @@ export function CustomerData() {
                   <div className="flex items-center gap-2 text-sm">
                     <button
                       onClick={() => { setSelectedCustomer(customer); setOpenDialog("employee"); }}
-                      
                       className="text-blue-600 hover:text-blue-800 hover:underline text-[14px]"
                     >
                       员工账号
+                    </button>
+                    <button
+                      onClick={() => { setSelectedCustomer(customer); setOpenDialog("view"); }}
+                      className="text-blue-600 hover:text-blue-800 hover:underline text-[14px]"
+                    >
+                      查看
                     </button>
                     <button
                       onClick={() => openEditDialog(customer)}
@@ -1080,6 +1096,122 @@ export function CustomerData() {
             <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-end shrink-0">
               <button onClick={() => setOpenDialog(null)} className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200">
                 关闭
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========== 查看弹框 ========== */}
+      {openDialog === "view" && selectedCustomer && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl flex flex-col" style={{ width: 640, maxHeight: "85vh" }}>
+            <div className="px-5 py-2.5 border-b border-gray-200 rounded-t-xl flex items-center justify-between shrink-0" style={{ backgroundColor: "#F9FAFB" }}>
+              <h2 className="text-lg font-bold text-gray-800">客户详情</h2>
+              <button onClick={() => setOpenDialog(null)} className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded transition-colors">
+                <CloseIcon sx={{ fontSize: 18 }} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-5">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                {[
+                  ["客户名称", selectedCustomer.customerName],
+                  ["联系电话", selectedCustomer.phone],
+                  ["性别", selectedCustomer.gender],
+                  ["往来类别", selectedCustomer.tradeCategory],
+                  ["结算方式", selectedCustomer.settlementMethod],
+                  ["结款周期", selectedCustomer.paymentCycle],
+                  ["客户经理", selectedCustomer.accountManager],
+                  ["信用额度", String(selectedCustomer.creditLimit)],
+                  ["期初欠款", String(selectedCustomer.initialDebt)],
+                  ["总欠款金额", String(selectedCustomer.totalDebtAmount)],
+                  ["总消费次数", String(selectedCustomer.totalConsumeCount)],
+                  ["总消费金额", String(selectedCustomer.totalConsumeAmount)],
+                  ["首次消费时间", selectedCustomer.firstConsumeTime || "-"],
+                  ["最近消费时间", selectedCustomer.lastConsumeTime || "-"],
+                  ["创建时间", selectedCustomer.createTime],
+                  ["备注", selectedCustomer.remark || "-"],
+                ].map(([label, value]) => (
+                  <div key={label} className="flex gap-2">
+                    <span className="text-sm text-gray-500 shrink-0 w-24">{label}：</span>
+                    <span className="text-sm text-gray-800 font-medium">{value}</span>
+                  </div>
+                ))}
+                <div className="col-span-2 flex gap-2">
+                  <span className="text-sm text-gray-500 shrink-0 w-24">标签：</span>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedCustomer.tags.length > 0
+                      ? selectedCustomer.tags.map((tag) => (
+                          <span key={tag} className="inline-flex px-2 py-0.5 text-xs rounded bg-blue-100 text-blue-700">{tag}</span>
+                        ))
+                      : <span className="text-sm text-gray-400">-</span>}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-end shrink-0">
+              <button onClick={() => setOpenDialog(null)} className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200">
+                关闭
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========== 更多查询弹框 ========== */}
+      {showMoreQuery && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl flex flex-col" style={{ width: 520 }}>
+            <div className="px-5 py-2.5 border-b border-gray-200 rounded-t-xl flex items-center justify-between shrink-0" style={{ backgroundColor: "#F9FAFB" }}>
+              <h2 className="text-lg font-bold text-gray-800">更多查询条件</h2>
+              <button onClick={() => setShowMoreQuery(false)} className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded transition-colors">
+                <CloseIcon sx={{ fontSize: 18 }} />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-600 shrink-0 w-20">消费金额</span>
+                <div className="flex-1 flex items-center gap-2">
+                  <input
+                    type="number"
+                    placeholder="最小"
+                    value={minAmount}
+                    onChange={(e) => setMinAmount(e.target.value)}
+                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400 bg-white"
+                  />
+                  <span className="text-gray-400 shrink-0">~</span>
+                  <input
+                    type="number"
+                    placeholder="最大"
+                    value={maxAmount}
+                    onChange={(e) => setMaxAmount(e.target.value)}
+                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400 bg-white"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-600 shrink-0 w-20">所在地</span>
+                <input
+                  type="text"
+                  placeholder="请选择省市区"
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400 bg-white"
+                />
+              </div>
+            </div>
+            <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2 shrink-0">
+              <button
+                onClick={() => { setShowMoreQuery(false); handleReset(); }}
+                className="px-4 py-2 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
+              >
+                重置
+              </button>
+              <button
+                onClick={() => { setShowMoreQuery(false); handleSearch(); }}
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm"
+              >
+                搜索
               </button>
             </div>
           </div>

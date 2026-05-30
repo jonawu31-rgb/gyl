@@ -74,7 +74,13 @@ const mockRepayments: RepaymentRecord[] = [
 ];
 
 const supplierOptions = mockSummary.map(r => r.supplier);
-const CHART_COLORS = ["#3b82f6", "#06b6d4", "#8b5cf6"];
+const DEBT_CHART_COLORS = ["#2563eb", "#0ea5e9", "#8b5cf6", "#14b8a6", "#f59e0b", "#ef4444"];
+const PURCHASE_CHART_COLORS = ["#1d4ed8", "#06b6d4", "#7c3aed", "#10b981", "#f97316", "#dc2626"];
+const chartExtraSuppliers = [
+  { name: "东莞顺达汽配", remainingDebt: 9200, totalPurchase: 64000 },
+  { name: "中山恒兴零部件", remainingDebt: 5600, totalPurchase: 43800 },
+  { name: "惠州宏远汽配", remainingDebt: 7800, totalPurchase: 52500 },
+];
 
 const fmt = (n: number) => n > 0 ? `¥${n.toLocaleString()}` : "¥0";
 
@@ -90,7 +96,10 @@ export function ProcurementPayable() {
   const filteredDetails = mockDetails.filter(r => !searchSupplier || r.supplier === searchSupplier);
   const filteredRepayments = mockRepayments.filter(r => !searchSupplier || r.supplier === searchSupplier);
 
-  const chartData = filteredSummary.map(r => ({ name: r.supplier.slice(0, 6), remainingDebt: r.remainingDebt, totalPurchase: r.totalPurchase }));
+  const chartData = [
+    ...filteredSummary.map(r => ({ name: r.supplier.slice(0, 6), remainingDebt: r.remainingDebt, totalPurchase: r.totalPurchase })),
+    ...chartExtraSuppliers,
+  ];
 
   const handleReset = () => { setSearchSupplier(""); setCurrentPage(1); };
 
@@ -162,8 +171,8 @@ export function ProcurementPayable() {
                       <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `¥${(v / 1000).toFixed(0)}k`} />
                       <Tooltip formatter={(val: number) => [`¥${val.toLocaleString()}`, "剩余欠款"]} />
-                      <Bar dataKey="remainingDebt" radius={[4, 4, 0, 0]}>
-                        {chartData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                      <Bar dataKey="remainingDebt" radius={[4, 4, 0, 0]} barSize={18}>
+                        {chartData.map((_, i) => <Cell key={i} fill={DEBT_CHART_COLORS[i % DEBT_CHART_COLORS.length]} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -178,8 +187,8 @@ export function ProcurementPayable() {
                       <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `¥${(v / 1000).toFixed(0)}k`} />
                       <Tooltip formatter={(val: number) => [`¥${val.toLocaleString()}`, "累计进货"]} />
-                      <Bar dataKey="totalPurchase" radius={[4, 4, 0, 0]}>
-                        {chartData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                      <Bar dataKey="totalPurchase" radius={[4, 4, 0, 0]} barSize={18}>
+                        {chartData.map((_, i) => <Cell key={i} fill={PURCHASE_CHART_COLORS[i % PURCHASE_CHART_COLORS.length]} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>

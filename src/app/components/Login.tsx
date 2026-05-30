@@ -1,6 +1,5 @@
 import { useState } from "react";
 import imgLoginBg from "figma:asset/2ab02ad19ae9ff8fe85aa0d60b68394c8366bad4.png";
-import { Logo } from "./Logo";
 import {
   Person as PersonIcon,
   Lock as LockIcon,
@@ -34,8 +33,7 @@ export function Login({ onLogin }: LoginProps) {
 
         {/* Content Overlay */}
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-8">
-            <Logo />
+          <div className="mb-8">
             <h1 className="text-6xl font-bold text-gray-800 tracking-tight">车配智数</h1>
           </div>
           <p className="text-xl text-gray-600 mb-4 font-semibold">智能 · 高效 · 可靠</p>

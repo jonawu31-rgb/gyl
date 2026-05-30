@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -43,6 +43,7 @@ const mockRecords: CommissionRecord[] = [
 
 const allRoles = ["销售员", "接单员", "拣货员", "打包员", "发货员"];
 const allEmployees = ["张三", "李四", "王五", "赵六", "孙七"];
+const allCategories = ["刹车系统", "发动机附件", "变速箱", "悬挂系统", "电气系统"];
 
 // ─── Confirm Delete ───────────────────────────────────────────────────────────
 
@@ -76,6 +77,83 @@ function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void 
   );
 }
 
+function RoleMultiSelect({
+  value,
+  onChange,
+  options,
+  placeholder,
+}: {
+  value: string[];
+  onChange: (next: string[]) => void;
+  options: string[];
+  placeholder: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, []);
+
+  const toggle = (role: string) => {
+    if (value.includes(role)) {
+      onChange(value.filter((item) => item !== role));
+    } else {
+      onChange([...value, role]);
+    }
+  };
+
+  const displayText = value.length > 0 ? value.join("、") : placeholder;
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-3 py-2 text-left text-sm text-gray-800 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+      >
+        <span className={`truncate ${value.length === 0 ? "text-gray-400" : "text-gray-800"}`}>
+          {displayText}
+        </span>
+        <span className="ml-3 text-gray-400">⌄</span>
+      </button>
+
+      {open && (
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+          {options.map((option) => {
+            const checked = value.includes(option);
+            return (
+              <button
+                key={option}
+                type="button"
+                onClick={() => toggle(option)}
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-blue-50 ${
+                  checked ? "bg-blue-50 text-blue-700" : "text-gray-700"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  readOnly
+                  checked={checked}
+                  className="pointer-events-none h-4 w-4 accent-blue-500"
+                />
+                <span>{option}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Tier Table ───────────────────────────────────────────────────────────────
 
 function TierTable({ tiers, onChange }: { tiers: Tier[]; onChange: (t: Tier[]) => void }) {
@@ -104,10 +182,10 @@ function TierTable({ tiers, onChange }: { tiers: Tier[]; onChange: (t: Tier[]) =
                 <input type="number" value={tier.lower} onChange={(e) => update(tier.id, "lower", e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-400" placeholder="0" />
               </td>
               <td className="px-3 py-1.5">
-                <input type="number" value={tier.upper} onChange={(e) => update(tier.id, "upper", e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-400" placeholder="100000" />
+                <input type="text" value={tier.upper} onChange={(e) => update(tier.id, "upper", e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-400" placeholder="空表示及以上" />
               </td>
               <td className="px-3 py-1.5">
-                <input type="number" value={tier.ratio} onChange={(e) => update(tier.id, "ratio", e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-400" placeholder="1.00" />
+                <input type="number" value={tier.ratio} onChange={(e) => update(tier.id, "ratio", e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-400" placeholder="0-100" />
               </td>
               <td className="px-3 py-1.5 text-center">
                 <button onClick={() => remove(tier.id)} className="text-red-400 hover:text-red-600 transition-colors">
@@ -118,9 +196,6 @@ function TierTable({ tiers, onChange }: { tiers: Tier[]; onChange: (t: Tier[]) =
           ))}
         </tbody>
       </table>
-      <button onClick={add} className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 px-2 py-1 rounded hover:bg-blue-50 transition-colors">
-        <AddIcon sx={{ fontSize: 14 }} />新增一档
-      </button>
     </div>
   );
 }
@@ -140,9 +215,9 @@ function CommissionDialog({ open, editData, onClose, onSave }: DialogProps) {
   const [employee, setEmployee] = useState(editData?.employee === "全员" ? "" : (editData?.employee || ""));
   const [amountOn, setAmountOn] = useState(editData?.amountEnabled ?? false);
   const [amountBasis, setAmountBasis] = useState<"按销售额" | "按毛利润">(editData?.amountBasis === "按毛利润" ? "按毛利润" : "按销售额");
-  const [amountTiers, setAmountTiers] = useState<Tier[]>([{ id: "init1", lower: "", upper: "", ratio: "" }]);
+  const [amountTiers, setAmountTiers] = useState<Tier[]>([{ id: "init1", lower: "0", upper: "", ratio: "" }]);
   const [grossOn, setGrossOn] = useState(editData?.grossEnabled ?? false);
-  const [grossTiers, setGrossTiers] = useState<Tier[]>([{ id: "init2", lower: "", upper: "", ratio: "" }]);
+  const [grossTiers, setGrossTiers] = useState<Tier[]>([{ id: "init2", lower: "0", upper: "", ratio: "" }]);
 
   if (!open) return null;
 
@@ -176,10 +251,22 @@ function CommissionDialog({ open, editData, onClose, onSave }: DialogProps) {
 
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Base fields */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">品类 <span className="text-red-500">*</span></label>
-              <input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="请选择品类" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder:text-gray-400" />
+              <FauxSelect className="w-full" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="请选择品类">
+                <option value="">请选择品类</option>
+                {allCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+              </FauxSelect>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">提成业务角色 <span className="text-red-500">*</span></label>
+              <RoleMultiSelect
+                value={selectedRoles}
+                onChange={setSelectedRoles}
+                options={allRoles}
+                placeholder="请选择提成业务角色"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">关联员工</label>
@@ -189,60 +276,60 @@ function CommissionDialog({ open, editData, onClose, onSave }: DialogProps) {
               </FauxSelect>
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">提成业务角色 <span className="text-red-500">*</span></label>
-            <div className="flex flex-wrap gap-2">
-              {allRoles.map(role => (
-                <button
-                  key={role}
-                  onClick={() => toggleRole(role)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${selectedRoles.includes(role) ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-600 border-gray-300 hover:border-blue-400 hover:text-blue-600"}`}
-                >
-                  {role}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Amount commission */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden">
-            <div className="px-4 py-3 bg-gray-50 flex items-center justify-between">
-              <div>
-                <span className="text-sm font-semibold text-gray-700">金额提成</span>
-                <span className="text-xs text-gray-400 ml-2">按销售额或毛利润的百分比计算提成</span>
+          <div className="border border-blue-200 rounded-xl overflow-hidden bg-blue-50/30">
+            <div className="px-4 py-3 flex items-center gap-3 border-b border-blue-100 bg-blue-50/50">
+              <span className="px-2.5 py-1 text-sm font-semibold text-white bg-blue-600 rounded">金额提成设置</span>
+              <div className="flex items-center gap-2 text-sm">
+                <span className={`${amountOn ? "text-gray-500" : "text-blue-600 font-medium"}`}>关闭</span>
+                <Toggle on={amountOn} onChange={setAmountOn} />
+                <span className={`${amountOn ? "text-blue-600 font-medium" : "text-gray-500"}`}>开启</span>
               </div>
-              <Toggle on={amountOn} onChange={setAmountOn} />
             </div>
             {amountOn && (
-              <div className="px-4 py-3 space-y-3">
-                <div>
-                  <span className="text-xs font-medium text-gray-600 mr-3">提成基准：</span>
+              <div className="px-4 py-4 space-y-4">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium text-gray-700">提成基准</span>
                   {(["按销售额", "按毛利润"] as const).map(opt => (
-                    <label key={opt} className="inline-flex items-center gap-1.5 mr-4 cursor-pointer">
+                    <label key={opt} className="inline-flex items-center gap-2 cursor-pointer">
                       <input type="radio" checked={amountBasis === opt} onChange={() => setAmountBasis(opt)} className="accent-blue-500" />
                       <span className="text-sm text-gray-700">{opt}</span>
                     </label>
                   ))}
                 </div>
                 <div>
-                  <div className="text-xs text-gray-400 mb-2">示例：0-10万 提成1%，10-50万 提成1.5%，50万以上 提成2%</div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-medium text-gray-700">阶梯设置</span>
+                    <button
+                      onClick={() => setAmountTiers((prev) => [...prev, { id: String(Date.now()), lower: "", upper: "", ratio: "" }])}
+                      className="px-2.5 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                    >
+                      + 新增一档
+                    </button>
+                  </div>
                   <TierTable tiers={amountTiers} onChange={setAmountTiers} />
+                  <div className="text-xs text-gray-400 mt-2">
+                    示例：0-10万 提成1%，10-50万 提成1.5%，50万以上 提成2%（可与提成2同时配置，也可只配置其一）
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
           {/* Gross rate commission */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden">
-            <div className="px-4 py-3 bg-gray-50 flex items-center justify-between">
-              <div>
-                <span className="text-sm font-semibold text-gray-700">毛利率(利润比)提成</span>
-                <span className="text-xs text-gray-400 ml-2">按毛利率区间设置提成比例</span>
+          <div className="border border-blue-200 rounded-xl overflow-hidden bg-blue-50/30">
+            <div className="px-4 py-3 flex items-center gap-3 border-b border-blue-100 bg-blue-50/50">
+              <span className="px-2.5 py-1 text-sm font-semibold text-white bg-blue-600 rounded">毛利率(利润比)提成设置</span>
+              <div className="flex items-center gap-2 text-sm">
+                <span className={`${grossOn ? "text-gray-500" : "text-blue-600 font-medium"}`}>关闭</span>
+                <Toggle on={grossOn} onChange={setGrossOn} />
+                <span className={`${grossOn ? "text-blue-600 font-medium" : "text-gray-500"}`}>开启</span>
               </div>
-              <Toggle on={grossOn} onChange={setGrossOn} />
             </div>
             {grossOn && (
-              <div className="px-4 py-3">
+              <div className="px-4 py-4">
+                <div className="text-sm text-gray-600 mb-3">按毛利率区间设置提成比例</div>
                 <TierTable tiers={grossTiers} onChange={setGrossTiers} />
               </div>
             )}

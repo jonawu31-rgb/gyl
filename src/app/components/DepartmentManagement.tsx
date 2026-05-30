@@ -406,6 +406,19 @@ export function DepartmentManagement() {
     setDeleteItem(item);
   };
 
+  const handleToggleStatus = (item: Department) => {
+    setData((prev) =>
+      prev.map((row) =>
+        row.id === item.id
+          ? {
+              ...row,
+              status: row.status === "启用" ? "停用" : "启用",
+            }
+          : row
+      )
+    );
+  };
+
   const confirmDelete = () => {
     if (deleteItem) {
       setData((prev) => prev.filter((x) => x.id !== deleteItem.id));
@@ -573,15 +586,24 @@ export function DepartmentManagement() {
                     {item.sortValue}
                   </td>
                   <td className="px-4 py-2.5 text-center whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                    <button
+                      type="button"
+                      onClick={() => handleToggleStatus(item)}
+                      aria-pressed={item.status === "启用"}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                         item.status === "启用"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-500"
+                          ? "bg-blue-500"
+                          : "bg-gray-300"
                       }`}
                     >
-                      {item.status}
-                    </span>
+                      <span
+                        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+                          item.status === "启用"
+                            ? "translate-x-5"
+                            : "translate-x-1"
+                        }`}
+                      />
+                    </button>
                   </td>
                   <td className="px-4 py-2.5 text-sm text-gray-500 whitespace-nowrap">
                     {item.createTime}

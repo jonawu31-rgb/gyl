@@ -18,6 +18,20 @@ interface UniversalPart {
   createdAt: string;
 }
 
+interface LinkedPart {
+  id: string;
+  code: string;
+  name: string;
+  spec: string;
+  vehicleType: string;
+  featureCode: string;
+  origin: string;
+  unit: string;
+  supplierName: string;
+  warehouse: string;
+  brand: string;
+}
+
 const mockData: UniversalPart[] = [
   { id: "1", code: "UC00001", name: "60038", substituteRelation: "AB通用", remark: "", createdAt: "2026-01-21 16:57:41" },
   { id: "2", code: "UC00002", name: "6565",  substituteRelation: "AB通用", remark: "5233", createdAt: "2026-02-27 10:56:22" },
@@ -27,12 +41,20 @@ const mockData: UniversalPart[] = [
 ];
 
 const partsMock = [
-  { id: "P001", name: "前刹车片A", code: "BRK-001" },
-  { id: "P002", name: "前刹车片B", code: "BRK-002" },
-  { id: "P003", name: "后刹车片A", code: "BRK-003" },
-  { id: "P004", name: "机油滤芯X", code: "OIL-001" },
-  { id: "P005", name: "空调滤芯Y", code: "AIR-001" },
+  { id: "P001", code: "SP000004", name: "转向头", spec: "", vehicleType: "", featureCode: "", origin: "", unit: "", supplierName: "", warehouse: "", brand: "" },
+  { id: "P002", code: "SP000003", name: "壳牌机油", spec: "", vehicleType: "", featureCode: "", origin: "", unit: "", supplierName: "", warehouse: "", brand: "" },
+  { id: "P003", code: "352+656", name: "5646356", spec: "", vehicleType: "单独的", featureCode: "", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "" },
+  { id: "P004", code: "L034200000297", name: "下轴", spec: "", vehicleType: "伽途T3/祥菱V1", featureCode: "原厂", origin: "原厂", unit: "根", supplierName: "", warehouse: "嘉兴仓", brand: "原厂" },
+  { id: "P005", code: "MHJKKF", name: "卡扣【盟虎净】F", spec: "F", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
+  { id: "P006", code: "MHJKKE", name: "卡扣【盟虎净】E", spec: "E", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
+  { id: "P007", code: "MHJKKD", name: "卡扣【盟虎净】D", spec: "D", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
+  { id: "P008", code: "MHJKKC", name: "卡扣【盟虎净】C", spec: "C", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
+  { id: "P009", code: "MHJKKB14", name: "卡扣【盟虎净】B14", spec: "B14", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
+  { id: "P010", code: "MHJKKB12", name: "卡扣【盟虎净】B12", spec: "B12", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
+  { id: "P011", code: "MHJKKB11", name: "卡扣【盟虎净】B11", spec: "B11", vehicleType: "通用", featureCode: "自营品牌", origin: "", unit: "个", supplierName: "", warehouse: "嘉兴仓", brand: "盟虎净" },
 ];
+
+const partsTotal = 82;
 
 interface DialogProps {
   mode: "add" | "edit";
@@ -46,9 +68,8 @@ function PartDialog({ mode, record, onClose, onSave }: DialogProps) {
   const [name, setName] = useState(record?.name ?? "");
   const [relation, setRelation] = useState(record?.substituteRelation ?? "AB通用");
   const [remark, setRemark] = useState(record?.remark ?? "");
-  const [linkedParts, setLinkedParts] = useState<typeof partsMock>(
-    mode === "edit" ? partsMock.slice(0, 2) : []
-  );
+  const [linkedParts, setLinkedParts] = useState<LinkedPart[]>([]);
+  const [showPicker, setShowPicker] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const title = mode === "add" ? "新增通用件" : "编辑通用件";
@@ -67,12 +88,11 @@ function PartDialog({ mode, record, onClose, onSave }: DialogProps) {
     onClose();
   };
 
-  const togglePart = (part: typeof partsMock[0]) => {
-    if (linkedParts.find(p => p.id === part.id)) {
-      setLinkedParts(prev => prev.filter(p => p.id !== part.id));
-    } else {
-      setLinkedParts(prev => [...prev, part]);
-    }
+  const addSelectedParts = (parts: LinkedPart[]) => {
+    setLinkedParts((prev) => {
+      const existing = new Set(prev.map((p) => p.id));
+      return [...prev, ...parts.filter((p) => !existing.has(p.id))];
+    });
   };
 
   return (
@@ -137,35 +157,51 @@ function PartDialog({ mode, record, onClose, onSave }: DialogProps) {
 
           {tab === 1 && (
             <div className="px-5 py-4 space-y-3">
-              <div className="text-sm text-gray-600 mb-2">已关联配件（点击移除）：</div>
-              {linkedParts.length > 0 ? (
-                <div className="space-y-2">
-                  {linkedParts.map(p => (
-                    <div key={p.id} className="flex items-center justify-between px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
-                      <div>
-                        <span className="text-sm font-medium text-gray-800">{p.name}</span>
-                        <span className="text-xs text-gray-500 ml-2">{p.code}</span>
-                      </div>
-                      <button onClick={() => togglePart(p)} className="text-xs text-red-500 hover:text-red-700">移除</button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-sm text-gray-400 py-4 text-center">暂无关联配件</div>
-              )}
-              <div className="border-t border-gray-200 pt-3">
-                <div className="text-sm text-gray-600 mb-2">可关联配件（点击添加）：</div>
-                <div className="space-y-2">
-                  {partsMock.filter(p => !linkedParts.find(lp => lp.id === p.id)).map(p => (
-                    <div key={p.id} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 cursor-pointer" onClick={() => togglePart(p)}>
-                      <div>
-                        <span className="text-sm font-medium text-gray-800">{p.name}</span>
-                        <span className="text-xs text-gray-500 ml-2">{p.code}</span>
-                      </div>
-                      <button className="text-xs text-blue-600 hover:text-blue-800">添加</button>
-                    </div>
-                  ))}
-                </div>
+              <button
+                type="button"
+                onClick={() => setShowPicker(true)}
+                className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-sm flex items-center gap-1.5"
+              >
+                <AddIcon sx={{ fontSize: 16 }} />
+                新增
+              </button>
+
+              <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-emerald-50">
+                    <tr className="border-b border-gray-200">
+                      {["序号", "编号", "配件名称", "规格", "适用车型", "操作"].map((h) => (
+                        <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {linkedParts.length > 0 ? (
+                      linkedParts.map((part, index) => (
+                        <tr key={part.id} className="border-b border-gray-100 hover:bg-blue-50/40 transition-colors">
+                          <td className="px-4 py-2.5 text-sm text-gray-600">{index + 1}</td>
+                      <td className="px-4 py-2.5 text-sm text-gray-700">{part.code || "—"}</td>
+                      <td className="px-4 py-2.5 text-sm text-gray-800">{part.name || "—"}</td>
+                      <td className="px-4 py-2.5 text-sm text-gray-600">{part.spec || "—"}</td>
+                      <td className="px-4 py-2.5 text-sm text-gray-600">{part.vehicleType || "—"}</td>
+                      <td className="px-4 py-2.5">
+                        <button
+                          type="button"
+                          onClick={() => setLinkedParts((prev) => prev.filter((p) => p.id !== part.id))}
+                          className="text-xs text-red-500 hover:text-red-700"
+                            >
+                              删除
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={6} className="h-60 text-center text-sm text-gray-400">暂无数据</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
@@ -174,6 +210,213 @@ function PartDialog({ mode, record, onClose, onSave }: DialogProps) {
         <div className="flex justify-end gap-2 px-5 py-4 border-t border-gray-200 shrink-0">
           <button onClick={onClose} className="px-4 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
           <button onClick={handleSave} className="px-4 py-1.5 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-sm">确定</button>
+        </div>
+      </div>
+      {showPicker && (
+        <PartPickerDialog
+          onClose={() => setShowPicker(false)}
+          onConfirm={(selected) => {
+            addSelectedParts(selected);
+            setShowPicker(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function PartPickerDialog({
+  onClose,
+  onConfirm,
+}: {
+  onClose: () => void;
+  onConfirm: (parts: LinkedPart[]) => void;
+}) {
+  const [nameKeyword, setNameKeyword] = useState("");
+  const [codeKeyword, setCodeKeyword] = useState("");
+  const [page, setPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const pageSize = 11;
+
+  const filtered = partsMock.filter(
+    (part) =>
+      (!nameKeyword || part.name.includes(nameKeyword)) &&
+      (!codeKeyword || part.code.includes(codeKeyword)),
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+  const toggle = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
+
+  const selectAllCurrent = () => {
+    const ids = paged.map((p) => p.id);
+    const allSelected = ids.every((id) => selectedIds.includes(id));
+    setSelectedIds((prev) =>
+      allSelected
+        ? prev.filter((id) => !ids.includes(id))
+        : Array.from(new Set([...prev, ...ids])),
+    );
+  };
+
+  const selectedParts = partsMock.filter((p) => selectedIds.includes(p.id));
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="w-full max-w-5xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-800">选择配件</h3>
+          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+            <CloseIcon sx={{ fontSize: 18 }} />
+          </button>
+        </div>
+
+        <div className="px-5 py-4 border-b border-gray-200 bg-white">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-700 whitespace-nowrap">配件名称</span>
+              <input
+                value={nameKeyword}
+                onChange={(e) => { setNameKeyword(e.target.value); setPage(1); }}
+                placeholder="配件名称"
+                className="w-56 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-700 whitespace-nowrap">配件编码</span>
+              <input
+                value={codeKeyword}
+                onChange={(e) => { setCodeKeyword(e.target.value); setPage(1); }}
+                placeholder="配件编码"
+                className="w-56 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
+              />
+            </div>
+            <div className="ml-auto flex items-center gap-2">
+              <button className="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-sm flex items-center gap-1.5">
+                <SearchIcon sx={{ fontSize: 16 }} />
+                搜索
+              </button>
+              <button
+                onClick={() => {
+                  setNameKeyword("");
+                  setCodeKeyword("");
+                  setPage(1);
+                }}
+                className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5"
+              >
+                <RefreshIcon sx={{ fontSize: 16 }} />
+                重置
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-auto px-5 py-4">
+          <table className="w-full border border-gray-200">
+            <thead className="bg-emerald-50">
+              <tr className="border-b border-gray-200">
+                <th className="w-10 px-3 py-2 text-left text-xs font-semibold text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={paged.length > 0 && paged.every((p) => selectedIds.includes(p.id))}
+                    onChange={selectAllCurrent}
+                    className="h-4 w-4 accent-emerald-500"
+                  />
+                </th>
+                {["序号", "编码", "配件名称", "规格", "适用车型", "特征码", "产地", "单位", "供应商名称", "仓库", "品牌"].map((h) => (
+                  <th key={h} className="px-3 py-2 text-left text-xs font-semibold text-gray-700 whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {paged.length > 0 ? (
+                paged.map((part, index) => {
+                  const checked = selectedIds.includes(part.id);
+                  return (
+                    <tr key={part.id} className="border-b border-gray-100 hover:bg-blue-50/40">
+                      <td className="px-3 py-2">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggle(part.id)}
+                          className="h-4 w-4 accent-emerald-500"
+                        />
+                      </td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{(page - 1) * pageSize + index + 1}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.code}</td>
+                      <td className="px-3 py-2 text-sm text-gray-800">{part.name}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.spec || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.vehicleType || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.featureCode || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.origin || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.unit || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.supplierName || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.warehouse || "—"}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{part.brand || "—"}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={12} className="h-60 text-center text-sm text-gray-400">暂无数据</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-between text-sm shrink-0">
+          <div className="text-gray-600">
+            共 <span className="font-semibold text-gray-800">{partsTotal}</span> 条数据
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-gray-500">20条/页</span>
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-700 disabled:opacity-50"
+            >
+              上一页
+            </button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`w-8 h-8 rounded-lg border text-sm ${page === p ? "bg-emerald-500 text-white border-emerald-500" : "bg-white text-gray-700 border-gray-200"}`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages}
+              className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-700 disabled:opacity-50"
+            >
+              下一页
+            </button>
+            <span className="text-gray-500">前往</span>
+            <input
+              value={page}
+              onChange={(e) => setPage(Math.max(1, Math.min(totalPages, Number(e.target.value) || 1)))}
+              className="w-14 px-2 py-1 border border-gray-200 rounded-lg text-center"
+            />
+            <span className="text-gray-500">页</span>
+          </div>
+        </div>
+
+        <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2 shrink-0">
+          <button onClick={onClose} className="px-4 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
+          <button
+            onClick={() => onConfirm(selectedParts)}
+            className="px-4 py-1.5 text-sm text-white bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg hover:from-emerald-600 hover:to-emerald-700 shadow-sm"
+          >
+            确定
+          </button>
         </div>
       </div>
     </div>

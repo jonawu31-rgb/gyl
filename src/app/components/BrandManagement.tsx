@@ -290,51 +290,67 @@ export function BrandManagement() {
       <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white shrink-0">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-800">品牌管理</h2>
-          <button
-            onClick={handleAdd}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
-          >
-            <AddIcon sx={{ fontSize: 18 }} />
-            新增
-          </button>
         </div>
       </div>
 
       {/* Search Area */}
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 max-w-xs">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 min-w-0">
+            <label className="text-sm text-gray-700 whitespace-nowrap shrink-0 w-20">
+              品牌名称:
+            </label>
             <input
               type="text"
               placeholder="请输入品牌名称"
               value={searchBrandName}
-              onChange={(e) => setSearchBrandName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
+              onChange={(e) => {
+                setSearchBrandName(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-48 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder:text-gray-400"
             />
           </div>
-          <div className="flex-1 max-w-xs">
+          <div className="flex items-center gap-2 min-w-0">
+            <label className="text-sm text-gray-700 whitespace-nowrap shrink-0 w-20">
+              厂家名称:
+            </label>
             <input
               type="text"
               placeholder="请输入厂家名称"
               value={searchManufacturerName}
-              onChange={(e) => setSearchManufacturerName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
+              onChange={(e) => {
+                setSearchManufacturerName(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-48 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder:text-gray-400"
             />
           </div>
           <button
             onClick={handleSearch}
-            className="px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
+            className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5 shrink-0"
           >
-            <SearchIcon sx={{ fontSize: 16 }} />
+            <SearchIcon sx={{ fontSize: 15 }} />
             搜索
           </button>
           <button
             onClick={handleReset}
-            className="px-5 py-2 bg-white border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 shrink-0"
           >
             重置
           </button>
         </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
+        >
+          <AddIcon sx={{ fontSize: 16 }} />
+          新增
+        </button>
       </div>
 
       {/* Table */}
@@ -437,17 +453,24 @@ export function BrandManagement() {
       {/* Add/Edit Dialog */}
       {showDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg">
-            <div className="px-5 py-4 border-b border-gray-200">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl">
+            <div className="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-800">
                 {dialogMode === "add" ? "新增品牌" : "编辑品牌"}
               </h3>
+              <button
+                onClick={() => setShowDialog(false)}
+                className="p-1 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded"
+              >
+                ×
+              </button>
             </div>
-            <div className="px-5 py-6 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="px-5 py-5 space-y-4 max-h-[72vh] overflow-y-auto">
+              <div className="flex items-start gap-3">
+                <label className="w-20 shrink-0 pt-2 text-sm font-medium text-gray-700">
                   <span className="text-red-500">*</span> 品牌名称
                 </label>
+                <div className="flex-1">
                 <input
                   type="text"
                   placeholder="请输入品牌名称"
@@ -457,11 +480,13 @@ export function BrandManagement() {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
                 />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex items-start gap-3">
+                <label className="w-20 shrink-0 pt-2 text-sm font-medium text-gray-700">
                   品牌别名
                 </label>
+                <div className="flex-1">
                 <input
                   type="text"
                   placeholder="请输入品牌别名"
@@ -471,11 +496,13 @@ export function BrandManagement() {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
                 />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex items-start gap-3">
+                <label className="w-20 shrink-0 pt-2 text-sm font-medium text-gray-700">
                   厂家名称
                 </label>
+                <div className="flex-1">
                 <input
                   type="text"
                   placeholder="请输入厂家名称"
@@ -488,11 +515,13 @@ export function BrandManagement() {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
                 />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex items-start gap-3">
+                <label className="w-20 shrink-0 pt-2 text-sm font-medium text-gray-700">
                   英文名
                 </label>
+                <div className="flex-1">
                 <input
                   type="text"
                   placeholder="请输入英文名"
@@ -502,32 +531,39 @@ export function BrandManagement() {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
                 />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex items-start gap-3">
+                <label className="w-20 shrink-0 pt-2 text-sm font-medium text-gray-700">
                   <span className="text-red-500">*</span> 排序值
                 </label>
-                <input
-                  type="number"
-                  value={formData.sortValue}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      sortValue: parseInt(e.target.value) || 0,
-                    })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm"
-                />
+                <div className="w-36">
+                  <input
+                    type="number"
+                    value={formData.sortValue}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        sortValue: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex items-start gap-3">
+                <label className="w-20 shrink-0 pt-2 text-sm font-medium text-gray-700">
                   logo
                 </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
+                <div>
+                  <button
+                    type="button"
+                    className="flex h-28 w-28 items-center justify-center rounded-lg border border-dashed border-blue-200 bg-blue-50 text-blue-400 hover:border-blue-400 hover:text-blue-500 transition-colors text-3xl"
+                  >
+                    +
+                  </button>
+                  <p className="mt-2 text-xs text-gray-400">支持 JPG/PNG，建议正方形图片</p>
+                </div>
               </div>
             </div>
             <div className="px-5 py-4 border-t border-gray-200 flex justify-end gap-3">

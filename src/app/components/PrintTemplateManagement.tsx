@@ -34,7 +34,7 @@ const initTemplates: PrintTemplate[] = [
     marginRight: 15,
     isDefault: true,
     title: "结算单",
-    headerInfo: "公司：{companyName}",
+    headerInfo: "公司：嘉兴门店",
     footerNote: "感谢惠顾！",
     fontSize: 10,
     showPrice: true,

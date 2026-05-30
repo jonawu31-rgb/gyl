@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileDownload as ExportIcon } from "@mui/icons-material";
+import { FileDownload as ExportIcon, Search as SearchIcon } from "@mui/icons-material";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 interface CategoryRow {
@@ -75,8 +75,8 @@ function SummaryTable({ rows, title, colors }: TableProps) {
     profit: rows.reduce((s, r) => s + r.profit, 0),
   };
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+    <div className="border border-gray-200 rounded-lg overflow-hidden">
+      <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200">
         <span className="text-sm font-semibold text-gray-800">{title}</span>
       </div>
       <div className="overflow-x-auto">
@@ -138,81 +138,94 @@ const QUICK_DAYS = [{ label: "近7天", days: 7 }, { label: "近15天", days: 15
 
 export function CategorySummary() {
   const [quickDays, setQuickDays] = useState(30);
+  const [startDate, setStartDate] = useState("2026-05-01");
+  const [endDate, setEndDate] = useState("2026-05-29");
   const { categories, subCategories } = genData(quickDays);
 
   const totalRevenue = categories.reduce((s, r) => s + r.revenue, 0);
   const totalProfit = categories.reduce((s, r) => s + r.profit, 0);
 
   return (
-    <div className="h-full flex flex-col gap-3 overflow-y-auto p-4">
-      {/* Header card */}
-      <div className="bg-white rounded-xl border border-gray-200 shrink-0">
-        <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-800">品类汇总</h2>
-          <button className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5">
-            <ExportIcon sx={{ fontSize: 16 }} />导出
-          </button>
-        </div>
+    <div className="h-full flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white shrink-0 flex items-center justify-between">
+        <h2 className="text-lg font-bold text-gray-800">品类汇总</h2>
+        <button className="px-3 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 border border-gray-200 flex items-center gap-1.5">
+          <ExportIcon sx={{ fontSize: 16 }} />导出
+        </button>
+      </div>
 
-        {/* Filters */}
-        <div className="px-4 py-3 flex items-center gap-3">
+      {/* Filter bar */}
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 shrink-0">
+        <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-1">
             {QUICK_DAYS.map(({ label, days }) => (
               <button key={days} onClick={() => setQuickDays(days)}
-                className={`px-3 py-1.5 text-sm rounded-lg transition-all ${quickDays === days ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${quickDays === days ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"}`}>
                 {label}
               </button>
             ))}
           </div>
           <div className="w-px h-5 bg-gray-300" />
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <input type="date" defaultValue="2026-05-01"
-              className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-gray-50" />
-            <span className="text-gray-400">至</span>
-            <input type="date" defaultValue="2026-05-27"
-              className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-gray-50" />
-            <button className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-sm">查询</button>
+          <div className="flex items-center gap-2">
+            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+              className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-white" />
+            <span className="text-gray-400 text-sm">至</span>
+            <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
+              className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 text-sm bg-white" />
           </div>
+          <button className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5">
+            <SearchIcon sx={{ fontSize: 16 }} />搜索
+          </button>
+          <button onClick={() => { setQuickDays(30); setStartDate("2026-05-01"); setEndDate("2026-05-29"); }}
+            className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">重置</button>
         </div>
+      </div>
 
-        {/* Summary stats */}
-        <div className="px-4 pb-3 grid grid-cols-4 gap-3">
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Stat cards */}
+        <div className="grid grid-cols-4 gap-3">
           {[
             { label: "总业绩", value: fmtMoney(totalRevenue), sub: "近" + quickDays + "天", color: "blue" },
             { label: "总成本", value: fmtMoney(categories.reduce((s, r) => s + r.cost, 0)), sub: "近" + quickDays + "天", color: "gray" },
             { label: "总毛利", value: fmtMoney(totalProfit), sub: "近" + quickDays + "天", color: "green" },
             { label: "综合毛利率", value: fmtPct(totalProfit / totalRevenue * 100), sub: "平均", color: "purple" },
           ].map((s) => (
-            <div key={s.label} className="bg-gray-50 rounded-lg px-4 py-3">
+            <div key={s.label} className="bg-white border border-gray-200 rounded-xl px-4 py-4 shadow-sm">
               <p className="text-xs text-gray-500 mb-1">{s.label}</p>
               <p className={`text-lg font-bold ${s.color === "blue" ? "text-blue-600" : s.color === "green" ? "text-green-600" : s.color === "purple" ? "text-purple-600" : "text-gray-700"}`}>{s.value}</p>
               <p className="text-xs text-gray-400 mt-0.5">{s.sub}</p>
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Chart */}
-      <div className="bg-white rounded-xl border border-gray-200 shrink-0 p-4">
-        <p className="text-sm font-semibold text-gray-700 mb-3">大类业绩分布</p>
-        <div style={{ height: 200 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={categories} margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => "¥" + (v / 10000).toFixed(0) + "万"} />
-              <Tooltip formatter={(v: number) => fmtMoney(v)} labelStyle={{ fontWeight: 600 }} />
-              <Bar dataKey="revenue" name="业绩" radius={[4, 4, 0, 0]}>
-                {categories.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Chart */}
+        <div className="border border-gray-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200">
+            <span className="text-sm font-semibold text-gray-800">大类业绩分布</span>
+          </div>
+          <div className="p-4" style={{ height: 220 }}>
+            <div className="w-full h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={categories} margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => "¥" + (v / 10000).toFixed(0) + "万"} />
+                  <Tooltip formatter={(v: number) => fmtMoney(v)} labelStyle={{ fontWeight: 600 }} />
+                  <Bar dataKey="revenue" name="业绩" radius={[4, 4, 0, 0]} barSize={18}>
+                    {categories.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Tables */}
-      <SummaryTable rows={categories} title="大类业绩汇总" colors={COLORS} />
-      <SummaryTable rows={subCategories} title="二级品类业绩明细" />
+        {/* Tables */}
+        <SummaryTable rows={categories} title="大类业绩汇总" colors={COLORS} />
+        <SummaryTable rows={subCategories} title="二级品类业绩明细" />
+      </div>
     </div>
   );
 }

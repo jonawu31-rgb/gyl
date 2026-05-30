@@ -8,7 +8,6 @@ import {
   Warning as WarningIcon,
   Security as SecurityIcon,
   ExpandMore as ExpandMoreIcon,
-  ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
 
 interface Role {
@@ -566,10 +565,6 @@ function PermissionDialog({
   const [checkedKeys, setCheckedKeys] = useState<Set<string>>(
     new Set(roleData?.permissions || [])
   );
-  // 默认展开所有一级节点
-  const [expandedKeys, setExpandedKeys] = useState<Set<string>>(
-    new Set(permissionTree.map((node) => node.id))
-  );
 
   if (!open) return null;
 
@@ -617,44 +612,27 @@ function PermissionDialog({
     setCheckedKeys(newCheckedKeys);
   };
 
-  // 切换展开/折叠
-  const toggleExpand = (nodeId: string) => {
-    const newExpandedKeys = new Set(expandedKeys);
-    if (newExpandedKeys.has(nodeId)) {
-      newExpandedKeys.delete(nodeId);
-    } else {
-      newExpandedKeys.add(nodeId);
-    }
-    setExpandedKeys(newExpandedKeys);
-  };
-
   // 渲染树节点
   const renderTreeNode = (node: PermissionNode, level: number = 0) => {
     const hasChildren = node.children && node.children.length > 0;
-    const isExpanded = expandedKeys.has(node.id);
     const isChecked = isAllChildrenChecked(node);
     const isIndeterminate = !isChecked && isSomeChildrenChecked(node);
+    const childrenAreLeaves =
+      hasChildren && node.children!.every((child) => !child.children?.length);
 
     return (
-      <div key={node.id}>
+      <div key={node.id} className="space-y-2">
         <div
-          className="flex items-center gap-2 py-1.5 hover:bg-gray-50 rounded"
-          style={{ paddingLeft: `${level * 20}px` }}
+          className={`flex items-center gap-2 py-1.5 rounded ${
+            level === 0 ? "bg-gray-50/60 px-3" : ""
+          }`}
+          style={{ paddingLeft: level === 0 ? "12px" : `${level * 20}px` }}
         >
-          {hasChildren ? (
-            <button
-              onClick={() => toggleExpand(node.id)}
-              className="p-0.5 hover:bg-gray-200 rounded transition-colors"
-            >
-              {isExpanded ? (
-                <ExpandMoreIcon sx={{ fontSize: 16 }} className="text-gray-600" />
-              ) : (
-                <ChevronRightIcon sx={{ fontSize: 16 }} className="text-gray-600" />
-              )}
-            </button>
-          ) : (
-            <div className="w-5" />
-          )}
+          <div className="w-5 flex items-center justify-center">
+            {hasChildren ? (
+              <ExpandMoreIcon sx={{ fontSize: 16 }} className="text-gray-500" />
+            ) : null}
+          </div>
           <label className="flex items-center gap-2 cursor-pointer flex-1">
             <input
               type="checkbox"
@@ -665,13 +643,26 @@ function PermissionDialog({
                 }
               }}
               onChange={() => toggleCheck(node)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500 rounded"
+              className="w-4 h-4 accent-blue-600 focus:ring-blue-500 rounded"
             />
-            <span className="text-sm text-gray-700">{node.label}</span>
+            <span
+              className={`text-sm ${
+                hasChildren ? "font-medium text-gray-800" : "text-gray-700"
+              }`}
+            >
+              {node.label}
+            </span>
           </label>
         </div>
-        {hasChildren && isExpanded && (
-          <div>
+        {hasChildren && (
+          <div
+            className={
+              childrenAreLeaves
+                ? "flex flex-wrap gap-2 pl-7"
+                : "space-y-2"
+            }
+            style={childrenAreLeaves ? undefined : { paddingLeft: `${(level + 1) * 20}px` }}
+          >
             {node.children!.map((child) => renderTreeNode(child, level + 1))}
           </div>
         )}
@@ -701,7 +692,7 @@ function PermissionDialog({
         </div>
 
         <div className="flex-1 overflow-auto p-5">
-          <div className="space-y-2">
+          <div className="space-y-3">
             {permissionTree.map((node) => renderTreeNode(node))}
           </div>
         </div>

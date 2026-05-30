@@ -293,16 +293,7 @@ export function CategoryTypeManagement() {
     <div className="h-full flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white shrink-0">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-800">品类管理</h2>
-          <button
-            onClick={() => handleAdd(null)}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
-          >
-            <AddIcon sx={{ fontSize: 18 }} />
-            新增
-          </button>
-        </div>
+        <h2 className="text-lg font-bold text-gray-800">品类管理</h2>
       </div>
 
       {/* Search Area */}
@@ -340,6 +331,16 @@ export function CategoryTypeManagement() {
             重置
           </button>
         </div>
+      </div>
+
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <button
+          onClick={() => handleAdd(null)}
+          className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center gap-1.5"
+        >
+          <AddIcon sx={{ fontSize: 16 }} />
+          新增
+        </button>
       </div>
 
       {/* Table */}

@@ -51,13 +51,12 @@ export function PrintTextSettingDialog({
 
         <div className="flex-1 overflow-auto p-5">
           <div className="space-y-4">
-            <div className="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-1">
-              <label className="pt-2 text-sm text-gray-700 whitespace-nowrap">
+            <div className="flex items-start gap-3">
+              <label className="w-20 pt-2 text-sm text-gray-700 text-right whitespace-nowrap shrink-0">
                 标语内容
               </label>
               <input
                 type="text"
-                placeholder="请输入标语内容"
                 value={form.headerInfo}
                 onChange={(e) =>
                   set("headerInfo", e.target.value)
@@ -65,13 +64,12 @@ export function PrintTextSettingDialog({
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
               />
             </div>
-            <div className="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-1">
-              <label className="pt-2 text-sm text-gray-700 whitespace-nowrap">
+            <div className="flex items-start gap-3">
+              <label className="w-20 pt-2 text-sm text-gray-700 text-right whitespace-nowrap shrink-0">
                 售后事项内容
               </label>
               <textarea
                 rows={5}
-                placeholder="请输入售后事项内容"
                 value={form.footerNote}
                 onChange={(e) =>
                   set("footerNote", e.target.value)

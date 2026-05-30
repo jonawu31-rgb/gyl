@@ -525,7 +525,7 @@ export function DebtRecord() {
     <div className="h-full flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden">
       <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white shrink-0">
         <h2 className="text-lg font-bold text-gray-800">
-          挂账/欠款记录
+          账单明细
         </h2>
       </div>
 

@@ -46,6 +46,8 @@ export interface CustomerFormData {
   pinyinCode: string;
   customerType: string;
   remark: string;
+  tags: string[];
+  attachments: string[];
   priceCategories: PriceCategoryItem[];
 }
 
@@ -90,6 +92,8 @@ const EMPTY_FORM: CustomerFormData = {
   pinyinCode: "",
   customerType: "",
   remark: "",
+  tags: [],
+  attachments: [],
   priceCategories: [],
 };
 
@@ -256,6 +260,39 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                   onChange={(e) => set("birthDate", e.target.value)}
                   className={inputCls}
                 />
+              </div>
+              <div className="col-span-3">
+                <label className={labelCls}>标签</label>
+                <div className="flex flex-wrap gap-2 p-2 border border-gray-300 rounded-lg min-h-[40px]">
+                  {form.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => set("tags", form.tags.filter((t) => t !== tag))}
+                        className="hover:text-blue-900"
+                      >
+                        <CloseIcon sx={{ fontSize: 12 }} />
+                      </button>
+                    </span>
+                  ))}
+                  {["VIP客户", "优质客户", "新客户", "潜力客户", "重点维护", "欠款客户"]
+                    .filter((t) => !form.tags.includes(t))
+                    .map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => set("tags", [...form.tags, tag])}
+                        className="inline-flex items-center gap-0.5 px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-full hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      >
+                        <AddIcon sx={{ fontSize: 12 }} />
+                        {tag}
+                      </button>
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -672,6 +709,36 @@ export function CustomerDataDialog({ open, onClose, editData, onSave }: Customer
                 />
               </div>
             </div>
+          </div>
+
+          {/* 附件上传 */}
+          <div className="mb-2">
+            <SectionTitle title="附件上传" />
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer bg-gray-50">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                  <AddIcon sx={{ fontSize: 20 }} className="text-blue-500" />
+                </div>
+                <p className="text-sm text-gray-600">点击或拖拽文件到此处上传</p>
+                <p className="text-xs text-gray-400">支持 JPG、PNG、PDF 等格式，单文件不超过 10MB</p>
+              </div>
+            </div>
+            {form.attachments.length > 0 && (
+              <div className="mt-3 space-y-2">
+                {form.attachments.map((name, i) => (
+                  <div key={i} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-700">{name}</span>
+                    <button
+                      type="button"
+                      onClick={() => set("attachments", form.attachments.filter((_, idx) => idx !== i))}
+                      className="p-0.5 text-red-400 hover:text-red-600 transition-colors"
+                    >
+                      <CloseIcon sx={{ fontSize: 14 }} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

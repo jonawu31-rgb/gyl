@@ -269,44 +269,52 @@ export function OriginManagement() {
           <h2 className="text-lg font-bold text-gray-800">
             产地管理
           </h2>
-          <button
-            onClick={handleAdd}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
-          >
-            <AddIcon sx={{ fontSize: 18 }} />
-            新增
-          </button>
         </div>
       </div>
 
-      {/* Search Area */}
+      {/* Search */}
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 max-w-xs">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="请输入产地名称"
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm placeholder:text-gray-400"
-              />
-            </div>
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 min-w-0">
+            <label className="text-sm text-gray-700 whitespace-nowrap shrink-0 w-20">
+              产地名称:
+            </label>
+            <input
+              type="text"
+              placeholder="请输入产地名称"
+              value={searchName}
+              onChange={(e) => {
+                setSearchName(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-48 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder:text-gray-400"
+            />
           </div>
           <button
             onClick={handleSearch}
-            className="px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
+            className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5 shrink-0"
           >
-            <SearchIcon sx={{ fontSize: 16 }} />
+            <SearchIcon sx={{ fontSize: 15 }} />
             搜索
           </button>
           <button
             onClick={handleReset}
-            className="px-5 py-2 bg-white border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-4 py-1.5 bg-white text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 shrink-0"
           >
             重置
           </button>
         </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="px-4 py-2.5 border-b border-gray-200 bg-white shrink-0">
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex items-center gap-1.5"
+        >
+          <AddIcon sx={{ fontSize: 16 }} />
+          新增
+        </button>
       </div>
 
       {/* Table */}
